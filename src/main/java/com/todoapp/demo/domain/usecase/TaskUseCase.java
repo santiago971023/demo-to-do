@@ -2,12 +2,15 @@
 
     import com.todoapp.demo.domain.Status;
     import com.todoapp.demo.domain.api.ITaskServicePort;
+    import com.todoapp.demo.domain.exception.ErrorMessages;
+    import com.todoapp.demo.domain.exception.TaskValidationException;
     import com.todoapp.demo.domain.model.Task;
     import com.todoapp.demo.domain.model.User;
     import com.todoapp.demo.domain.spi.ITaskPersistencePort;
 
     import java.time.LocalDate;
     import java.util.List;
+    import java.util.regex.Pattern;
 
     public class TaskUseCase implements ITaskServicePort{
 
@@ -18,17 +21,34 @@
         }
 
         @Override
-        public void createTask(Task task, User userCreator, User userToAssign) {
+        public void createTask(Task task) {
+
+            if (!isValidTitle(task.getTitle())){
+                throw new TaskValidationException(ErrorMessages.TITLE_INVALID.getMessage());
+            }
+            if(!isValidDescription(task.getDescription())){
+                throw new TaskValidationException(ErrorMessages.DESCRIPTION_INVALID.getMessage());
+            }
+            if (!isValidStartDate(task.getStartDate())){
+                throw new TaskValidationException(ErrorMessages.STARTDATE_INVALID.getMessage());
+            }
+            if(!isValidFinishDate(task.getFinishDate())){
+                throw new TaskValidationException(ErrorMessages.FINISHDATE_INVALID.getMessage());
+            }
+            if(!isValidStatus(task.getStatus().name())){
+                throw new TaskValidationException((ErrorMessages.STATUS_INVALID.getMessage()));
+            }
+
+            taskPersistencePort.createTask(task);
+        }
+
+        @Override
+        public void updateTask(Task task) {
 
         }
 
         @Override
-        public void updateTask(Task task, User updaterUser) {
-
-        }
-
-        @Override
-        public void deleteTask(Long taskId, User deleterUser) {
+        public void deleteTask(Long taskId) {
 
         }
 
@@ -126,5 +146,23 @@
             }
         }
 
-        
+        public boolean isValidHistoryPoints(Integer historyPoints) {
+            // Verificar si el número es nulo
+            if (historyPoints == null){
+                return false;
+            }
+            // Verificar si el número se ajusta a la expresión regular (solo caracteres del 1 al 9 sin caracteres especiales)
+            String numberString = String.valueOf(historyPoints);
+            String regex = "[1-9]+"; // La expresión regular solo permite caracteres del 1 al 9 sin caracteres especiales
+            return Pattern.matches(regex, numberString);
+        }
+
+        public boolean isValidIdUser(String idUser) {
+            if (idUser == null || idUser.isEmpty()) {
+                return false;
+            }
+            // Usamos una expresión regular para verificar que el número contenga solo números y tenga máximo 10 dígitos
+            String regex = "\\d{1,10}";
+            return idUser.matches(regex);
+        }
     }

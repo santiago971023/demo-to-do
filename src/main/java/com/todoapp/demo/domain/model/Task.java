@@ -3,6 +3,7 @@ package com.todoapp.demo.domain.model;
 import com.todoapp.demo.domain.Status;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Task {
@@ -21,9 +22,10 @@ public class Task {
 
     private Integer historyPoints;
 
-    private List<User> assignedUsers;
+    private List<String> idUsers;
 
-    public Task(long id, String title, String description, LocalDate startDate, LocalDate finishDate, Status status, Integer historyPoints, List<User> assignedUsers) {
+    public Task(long id, String title, String description, LocalDate startDate, LocalDate finishDate, Status status,
+                Integer historyPoints, List<String> idUsers) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -31,7 +33,17 @@ public class Task {
         this.finishDate = finishDate;
         this.status = status;
         this.historyPoints = historyPoints;
-        this.assignedUsers = assignedUsers;
+        this.idUsers = idUsers;
+    }
+
+    public Task(String title, String description, LocalDate startDate, LocalDate finishDate, Status status, Integer historyPoints) {
+        this.title = title;
+        this.description = description;
+        this.startDate = startDate;
+        this.finishDate = finishDate;
+        this.status = status;
+        this.historyPoints = historyPoints;
+        this.idUsers = new ArrayList<>();
     }
 
     public Task(){
@@ -94,11 +106,11 @@ public class Task {
         this.historyPoints = historyPoints;
     }
 
-    public List<User> getAssignedUsers() {
-        return assignedUsers;
+    public List<String> getIdUsers() {
+        return idUsers;
     }
 
-    public void setAssignedUsers(List<User> assignedUsers) {
-        this.assignedUsers = assignedUsers;
+    public void setIdUsers(List<String> idUsers) {
+        this.idUsers = idUsers;
     }
 }

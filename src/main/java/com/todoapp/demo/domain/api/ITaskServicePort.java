@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface ITaskServicePort {
 
-    void createTask(Task task, User userCreator, User userToAssign);
+    void createTask(Task task);
 
-    void updateTask(Task task, User updaterUser);
+    void updateTask(Task task);
 
-    void deleteTask(Long taskId, User deleterUser);
+    void deleteTask(Long taskId);
 
     Task getTaskById(Long taskId);
 
