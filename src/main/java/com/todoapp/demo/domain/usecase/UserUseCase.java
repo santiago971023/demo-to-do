@@ -85,7 +85,7 @@ public class UserUseCase implements IUserServicePort {
 
     @Override
     public List<User> getUsersByRole(String role) {
-        return null;
+        return userPersistencePort.getUsersByRole(role);
     }
 
     @Override

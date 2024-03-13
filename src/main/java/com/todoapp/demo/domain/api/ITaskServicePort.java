@@ -26,6 +26,10 @@ public interface ITaskServicePort {
 
     List<Task> getTaskByFinishDate(LocalDate date);
 
-    void updateTaskStatus(Long taskId, String userId, String status);
+    void updateTaskStatus(Long taskId,String status);
+
+    void removeUser(Long taskId, String userId);
+
+    void assignUser(Long taskId, String userId);
 
 }

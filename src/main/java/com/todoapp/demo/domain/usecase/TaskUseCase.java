@@ -5,7 +5,6 @@
     import com.todoapp.demo.domain.exception.ErrorMessages;
     import com.todoapp.demo.domain.exception.TaskValidationException;
     import com.todoapp.demo.domain.model.Task;
-    import com.todoapp.demo.domain.model.User;
     import com.todoapp.demo.domain.spi.ITaskPersistencePort;
 
     import java.time.LocalDate;
@@ -44,47 +43,95 @@
 
         @Override
         public void updateTask(Task task) {
+            if (!isValidTitle(task.getTitle())){
+                throw new TaskValidationException(ErrorMessages.TITLE_INVALID.getMessage());
+            }
+            if(!isValidDescription(task.getDescription())){
+                throw new TaskValidationException(ErrorMessages.DESCRIPTION_INVALID.getMessage());
+            }
+            if (!isValidStartDate(task.getStartDate())){
+                throw new TaskValidationException(ErrorMessages.STARTDATE_INVALID.getMessage());
+            }
+            if(!isValidFinishDate(task.getFinishDate())){
+                throw new TaskValidationException(ErrorMessages.FINISHDATE_INVALID.getMessage());
+            }
+            if(!isValidStatus(task.getStatus().name())){
+                throw new TaskValidationException((ErrorMessages.STATUS_INVALID.getMessage()));
+            }
+            taskPersistencePort.updateTask(task);
 
         }
 
         @Override
         public void deleteTask(Long taskId) {
+            taskPersistencePort.deleteTask(taskId);
 
         }
 
         @Override
         public Task getTaskById(Long taskId) {
-            return null;
+            return taskPersistencePort.getTaskById(taskId);
         }
 
         @Override
         public List<Task> getAllTasks() {
-            return null;
+            return taskPersistencePort.getAllTasks();
         }
 
         @Override
         public List<Task> getTasksByUser(String userId) {
-            return null;
+            return taskPersistencePort.getTasksByUser(userId);
         }
 
         @Override
         public List<Task> getTaskByStatus(String status) {
-            return null;
+            return taskPersistencePort.getTaskByStatus(status);
         }
 
         @Override
         public List<Task> getTaskByStartDate(LocalDate date) {
-            return null;
+            return taskPersistencePort.getTaskByStartDate(date);
         }
 
         @Override
         public List<Task> getTaskByFinishDate(LocalDate date) {
-            return null;
+            return taskPersistencePort.getTaskByFinishDate(date);
         }
 
         @Override
-        public void updateTaskStatus(Long taskId, String userId, String status) {
+        public void updateTaskStatus(Long taskId,String status) {
+            if (!isValidIdTask(taskId)){
+                throw new TaskValidationException(ErrorMessages.IDTASK_INVALID.getMessage());
 
+            }
+            if (!isValidStatus(status)){
+                throw new TaskValidationException(ErrorMessages.STATUS_INVALID.getMessage());
+            }
+
+            taskPersistencePort.updateTaskStatus(taskId, status);
+
+        }
+
+        @Override
+        public void removeUser(Long taskId, String userId) {
+            if (!isValidIdTask(taskId)){
+                throw new TaskValidationException(ErrorMessages.IDTASK_INVALID.getMessage());
+            }
+            if (!isValidIdUser(userId)){
+                throw new TaskValidationException(ErrorMessages.ID_INVALID.getMessage());
+            }
+            taskPersistencePort.getTaskById(taskId).getIdUsers().remove(userId);
+        }
+
+        @Override
+        public void assignUser(Long taskId, String userId) {
+            if (!isValidIdTask(taskId)){
+                throw new TaskValidationException(ErrorMessages.IDTASK_INVALID.getMessage());
+            }
+            if (!isValidIdUser(userId)){
+                throw new TaskValidationException(ErrorMessages.ID_INVALID.getMessage());
+            }
+            taskPersistencePort.getTaskById(taskId).getIdUsers().add(userId);
         }
 
         //VALIDACIONES
