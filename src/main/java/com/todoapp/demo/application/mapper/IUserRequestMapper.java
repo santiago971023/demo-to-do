@@ -1,4 +1,4 @@
-package com.todoapp.demo.application.dto.mapper;
+package com.todoapp.demo.application.mapper;
 
 
 import com.todoapp.demo.application.dto.request.UserRequestDto;

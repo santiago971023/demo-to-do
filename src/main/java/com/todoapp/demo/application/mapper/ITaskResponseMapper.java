@@ -1,4 +1,4 @@
-package com.todoapp.demo.application.dto.mapper;
+package com.todoapp.demo.application.mapper;
 
 import com.todoapp.demo.application.dto.response.TaskResponseDto;
 import com.todoapp.demo.domain.model.Task;
