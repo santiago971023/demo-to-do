@@ -18,6 +18,12 @@ public interface IUserServicePort {
 
     List<User> getUsersByName(String name);
 
+    List<User> getUsersByLastname(String lastname);
+
+    List<User> getAllUsers();
+
+    List<User> getUsersByTaskId(Long idTask);
+
     User getUserById(String id);
 
     List<User> getUsersByRole(String role);

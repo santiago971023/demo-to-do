@@ -79,6 +79,21 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
+    public List<User> getUsersByLastname(String lastname) {
+        return null;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return null;
+    }
+
+    @Override
+    public List<User> getUsersByTaskId(Long idTask) {
+        return null;
+    }
+
+    @Override
     public User getUserById(String id) {
         return userPersistencePort.getUserById(id);
     }
