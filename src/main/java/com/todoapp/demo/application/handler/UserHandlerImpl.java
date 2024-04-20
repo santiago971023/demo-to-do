@@ -3,18 +3,19 @@ package com.todoapp.demo.application.handler;
 import com.todoapp.demo.application.dto.request.UserRequestDto;
 import com.todoapp.demo.application.dto.response.UserResponseDto;
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
+import com.todoapp.demo.application.exception.UserValidationException;
 import com.todoapp.demo.application.mapper.IUserRequestMapper;
 import com.todoapp.demo.application.mapper.IUserResponseMapper;
 import com.todoapp.demo.domain.Role;
 import com.todoapp.demo.domain.api.IUserServicePort;
 import com.todoapp.demo.domain.exception.ErrorMessages;
-import com.todoapp.demo.domain.exception.UserValidationException;
 import com.todoapp.demo.domain.model.Task;
 import com.todoapp.demo.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,6 +29,7 @@ public class UserHandlerImpl implements IUserHandler {
 
     @Override
     public void createUser(UserRequestDto userRequestDtoToCreate, String creatorId) {
+
         if (!canCreateUser(creatorId, userRequestDtoToCreate)) {
             throw new UserValidationException(ErrorMessagesApplication.CANT_CREATE.getMessage());
         }
@@ -38,11 +40,12 @@ public class UserHandlerImpl implements IUserHandler {
 
     @Override
     public void updateUser(UserRequestDto userRequestDtoToUpdate, String updaterId) {
+
         if (!canUpdateUser(updaterId, userRequestDtoToUpdate)) {
             throw new UserValidationException(ErrorMessagesApplication.CANT_UPDATE.getMessage());
         }
         User userToUpdate = userRequestMapper.toUser(userRequestDtoToUpdate);
-        userServicePort.createUser(userToUpdate);
+        userServicePort.updateUser(userToUpdate);
     }
 
     @Override
@@ -76,7 +79,16 @@ public class UserHandlerImpl implements IUserHandler {
 
     @Override
     public List<UserResponseDto> getUsersByRole(String role) {
-        return userResponseMapper.toUserResponseList(userServicePort.getUsersByRole(role));
+
+        List<User> allUsers = userServicePort.getAllUsers();
+        List<User> usersWithRole = new ArrayList<>();
+        for (User user : allUsers) {
+
+            if(user.getRole().toString().equalsIgnoreCase(role)){
+                usersWithRole.add(user);
+            }
+        }
+        return userResponseMapper.toUserResponseList(usersWithRole);
     }
 
     @Override
@@ -107,6 +119,7 @@ public class UserHandlerImpl implements IUserHandler {
     public void assignTask(String userToAssignId, Long idTaskToAssign, String updaterId) {
 
         User userToAssign = userServicePort.getUserById(userToAssignId);
+
         User updater = userServicePort.getUserById(updaterId);
 
         if (!canUpdateTasksToUser(updaterId, userToAssignId)) {
@@ -119,6 +132,7 @@ public class UserHandlerImpl implements IUserHandler {
             userServicePort.updateUser(userToAssign);
         }
 
+
     }
 
     // VALIDACIONES
@@ -126,10 +140,12 @@ public class UserHandlerImpl implements IUserHandler {
     public boolean canCreateUser( String creatorId, UserRequestDto userBeingCreated) {
         User userCreator = userServicePort.getUserById(creatorId);
         //  Debemos verificar si el usuario que crea es un admin
+
         if (userCreator != null && userCreator.getRole() == Role.ADMIN) {
             // Si quien está siendo creado es un Empleado o un Lider
             if (userBeingCreated != null &&
                     (userBeingCreated.getRole() == Role.COLLABORATOR || userBeingCreated.getRole() == Role.LEADER)) {
+
                 return true; // El usuario creador es admin y puede crear usuarios con roles de colaborador y lider
             }
         }
@@ -178,4 +194,6 @@ public class UserHandlerImpl implements IUserHandler {
         return false;
 
     }
+
+
 }

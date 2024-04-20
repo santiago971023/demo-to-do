@@ -28,8 +28,6 @@ public interface ITaskServicePort {
 
     void updateTaskStatus(Long taskId,String status);
 
-    void removeUser(Long taskId, String userId);
 
-    void assignUser(Long taskId, String userId);
 
 }

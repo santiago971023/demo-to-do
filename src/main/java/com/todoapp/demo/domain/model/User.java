@@ -2,6 +2,7 @@ package com.todoapp.demo.domain.model;
 
 import com.todoapp.demo.domain.Role;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -20,26 +21,27 @@ public class User {
 
     private List<Long> tasks;
 
-    public User(String id, String name, String lastname, String email, String password, Role role, List<Long> tasks) {
+    public User(String id, String name, String lastname, String email, String password, Role role) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.role = role;
-        this.tasks = tasks;
+        this.tasks = new ArrayList<>();
     }
 
     public User() {
     }
 
-    public User(String name, String lastname, String email, String password, Role role) {
+    public User(String name, String lastname, String email, String password, Role role, List<Long> tasks) {
 
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.tasks = tasks;
     }
 
 

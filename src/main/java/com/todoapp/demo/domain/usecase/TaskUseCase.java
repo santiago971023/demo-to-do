@@ -26,6 +26,7 @@
                 throw new TaskValidationException(ErrorMessages.TITLE_INVALID.getMessage());
             }
             if(!isValidDescription(task.getDescription())){
+
                 throw new TaskValidationException(ErrorMessages.DESCRIPTION_INVALID.getMessage());
             }
             if (!isValidStartDate(task.getStartDate())){
@@ -112,27 +113,27 @@
 
         }
 
-        @Override
-        public void removeUser(Long taskId, String userId) {
-            if (!isValidIdTask(taskId)){
-                throw new TaskValidationException(ErrorMessages.IDTASK_INVALID.getMessage());
-            }
-            if (!isValidIdUser(userId)){
-                throw new TaskValidationException(ErrorMessages.ID_INVALID.getMessage());
-            }
-            taskPersistencePort.getTaskById(taskId).getIdUsers().remove(userId);
-        }
-
-        @Override
-        public void assignUser(Long taskId, String userId) {
-            if (!isValidIdTask(taskId)){
-                throw new TaskValidationException(ErrorMessages.IDTASK_INVALID.getMessage());
-            }
-            if (!isValidIdUser(userId)){
-                throw new TaskValidationException(ErrorMessages.ID_INVALID.getMessage());
-            }
-            taskPersistencePort.getTaskById(taskId).getIdUsers().add(userId);
-        }
+//        @Override
+//        public void removeUser(Long taskId, String userId) {
+//            if (!isValidIdTask(taskId)){
+//                throw new TaskValidationException(ErrorMessages.IDTASK_INVALID.getMessage());
+//            }
+//            if (!isValidIdUser(userId)){
+//                throw new TaskValidationException(ErrorMessages.ID_INVALID.getMessage());
+//            }
+//            taskPersistencePort.getTaskById(taskId).getIdUsers().remove(userId);
+//        }
+//
+//        @Override
+//        public void assignUser(Long taskId, String userId) {
+//            if (!isValidIdTask(taskId)){
+//                throw new TaskValidationException(ErrorMessages.IDTASK_INVALID.getMessage());
+//            }
+//            if (!isValidIdUser(userId)){
+//                throw new TaskValidationException(ErrorMessages.ID_INVALID.getMessage());
+//            }
+//            taskPersistencePort.getTaskById(taskId).getIdUsers().add(userId);
+//        }
 
         //VALIDACIONES
         public boolean isValidIdTask(Long idTask){
@@ -153,9 +154,11 @@
             if (description == null || description.isEmpty()){
                 return false;
             }
-            String regex = "^[A-Za-z]+$";
+            String regex = ".{15,}";
+           // String regex = "^[A-Za-z]+$";
 
             return description.matches(regex);
+            //return true;
         }
 
         public boolean isValidStartDate(LocalDate startDate){

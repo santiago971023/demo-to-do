@@ -11,11 +11,13 @@ import com.todoapp.demo.domain.api.ITaskServicePort;
 import com.todoapp.demo.domain.api.IUserServicePort;
 import com.todoapp.demo.domain.exception.TaskValidationException;
 import com.todoapp.demo.domain.model.Task;
+import com.todoapp.demo.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -53,7 +55,7 @@ public class TaskHandlerImpl implements ITaskHandler{
     @Override
     public void deleteTask(Long idTaskToDelete, String idDeleter) {
         if(!canDeleteTask(idTaskToDelete, idDeleter)){
-            throw new TaskValidationException(ErrorMessagesApplication.CANT_CREATE_TASK.getMessage());
+            throw new TaskValidationException(ErrorMessagesApplication.CANT_DELETE_TASK.getMessage());
         }
         taskServicePort.deleteTask(idTaskToDelete);
     }
@@ -99,8 +101,18 @@ public class TaskHandlerImpl implements ITaskHandler{
 
     @Override
     public List<TaskResponseDto> getTaskByStatus(String status) {
-        List<Task> taskList = taskServicePort.getTaskByStatus(status);
-        return taskResponseMapper.toTaskResponseList(taskList);
+
+        List<Task> allTasks = taskServicePort.getAllTasks();
+
+        List<Task> tasksWithStatus = new ArrayList<>();
+        for (Task task : allTasks) {
+
+            if(task.getStatus().toString().equalsIgnoreCase(status)){
+                tasksWithStatus.add(task);
+            }
+        }
+        return taskResponseMapper.toTaskResponseList(tasksWithStatus);
+
     }
 
     @Override

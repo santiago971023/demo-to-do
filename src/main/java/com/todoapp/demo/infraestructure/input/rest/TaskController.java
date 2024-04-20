@@ -3,6 +3,8 @@ package com.todoapp.demo.infraestructure.input.rest;
 import com.todoapp.demo.application.dto.request.TaskRequestDto;
 import com.todoapp.demo.application.dto.response.TaskResponseDto;
 import com.todoapp.demo.application.handler.ITaskHandler;
+import com.todoapp.demo.application.handler.IUserHandler;
+import com.todoapp.demo.application.handler.IUserTaskHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
@@ -13,11 +15,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/todo-app/task")
+@RequestMapping("/tasks")
 @RequiredArgsConstructor
 public class TaskController {
 
     private final ITaskHandler taskHandler;
+    private final IUserHandler userHandler;
+    private final IUserTaskHandler userTaskHandler;
 
     @PostMapping("/save/{idCreator}")
     public ResponseEntity<Void> saveTask(@RequestBody TaskRequestDto taskRequestDto,@PathVariable String idCreator){
@@ -73,6 +77,19 @@ public class TaskController {
     @GetMapping("/task-by-finish/{date}")
     public ResponseEntity<List<TaskResponseDto>> getTasksByFinishDate(@PathVariable LocalDate date){
         return ResponseEntity.ok(taskHandler.getTaskByFinishDate(date));
+    }
+
+    @PutMapping("/remove-user/{idUserToDelete}/{idTaskToDelete}/{idUserDeleter}")
+    public ResponseEntity<Void> removeUserFromTask(@PathVariable String idUserToDelete, @PathVariable String idUserDeleter, @PathVariable Long idTaskToDelete){
+        userTaskHandler.removeUser(idUserToDelete, idTaskToDelete);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+
+    }
+
+    @PutMapping("/assign-user/{idUserToAssign}/{idTaskToAssign}/{idUserAssigner}")
+    public ResponseEntity<Void> assignUserToTask(@PathVariable String idUserToAssign, @PathVariable String idUserAssigner, @PathVariable Long idTaskToAssign) {
+        userTaskHandler.assignUser(idUserToAssign, idTaskToAssign);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
 

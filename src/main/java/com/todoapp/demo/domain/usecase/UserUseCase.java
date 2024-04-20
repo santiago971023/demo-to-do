@@ -22,6 +22,8 @@ public class UserUseCase implements IUserServicePort {
 
     @Override
     public void createUser(User newUser) {
+
+
         if (!isValidId(newUser.getId())) {
             throw new UserValidationException(ErrorMessages.ID_INVALID.getMessage());
         }
@@ -34,6 +36,7 @@ public class UserUseCase implements IUserServicePort {
         if (!isValidEmail(newUser.getEmail())) {
             throw new UserValidationException(ErrorMessages.EMAIL_INVALID.getMessage());
         }
+
         if (!isValidPassword(newUser.getPassword())) {
             throw new UserValidationException(ErrorMessages.PASSWORD_INVALID.getMessage());
         }
@@ -64,7 +67,8 @@ public class UserUseCase implements IUserServicePort {
             throw new UserValidationException(ErrorMessages.ROLE_INVALID.getMessage());
         }
         User updatedUser = new User(userToUpdate.getName(), userToUpdate.getLastname(), userToUpdate.getEmail(),
-                userToUpdate.getPassword(), userToUpdate.getRole());
+                userToUpdate.getPassword(), userToUpdate.getRole(), userToUpdate.getTasks());
+
         userPersistencePort.updateUser(userToUpdate);
     }
 
@@ -80,17 +84,16 @@ public class UserUseCase implements IUserServicePort {
 
     @Override
     public List<User> getUsersByLastname(String lastname) {
-        return null;
+        return userPersistencePort.getUsersByLastName(lastname);
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return null;
+    public List<User> getAllUsers() {return userPersistencePort.getAllUsers();
     }
 
     @Override
     public List<User> getUsersByTaskId(Long idTask) {
-        return null;
+        return userPersistencePort.getUsersByTaskId(idTask);
     }
 
     @Override
@@ -182,7 +185,7 @@ public class UserUseCase implements IUserServicePort {
         if (password == null || password.isEmpty()) {
             return false;
         }
-        String regex = "^[A-Za-z0-9]+$";
+        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&*!])[A-Za-z\\d@#$%^&*!]{8,}$";
         return password.matches(regex);
     }
 

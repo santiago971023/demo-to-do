@@ -14,6 +14,12 @@ public interface IUserPersistencePort {
 
     List<User> getUsersByName(String name);
 
+    List<User> getUsersByLastName(String lastName);
+
+    List<User> getUsersByTaskId(Long taskId);
+
+    List<User> getAllUsers();
+
     User getUserById(String id);
 
     List<User> getUsersByRole(String role);

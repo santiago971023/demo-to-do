@@ -3,17 +3,20 @@ package com.todoapp.demo.infraestructure.input.rest;
 
 import com.todoapp.demo.application.dto.request.UserRequestDto;
 import com.todoapp.demo.application.dto.response.UserResponseDto;
+import com.todoapp.demo.application.exception.ErrorMessagesApplication;
+import com.todoapp.demo.application.exception.UserValidationException;
 import com.todoapp.demo.application.handler.ITaskHandler;
 import com.todoapp.demo.application.handler.IUserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/todo-app/user")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -23,8 +26,14 @@ public class UserController {
     //User
     @PostMapping("/save/{idCreator}")
     public ResponseEntity<Void> saveUser(@RequestBody UserRequestDto userRequestDtoToCreate, @PathVariable String idCreator) {
-        userHandler.createUser(userRequestDtoToCreate, idCreator);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+//        try{
+//            userHandler.createUser(userRequestDtoToCreate, idCreator);
+//            return ResponseEntity.status(HttpStatus.CREATED).build();
+//        }catch(UserValidationException e){
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_CREATE.getMessage(), e);
+//        }
+                 userHandler.createUser(userRequestDtoToCreate, idCreator);
+           return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/update/{idUpdater}")
@@ -74,22 +83,22 @@ public class UserController {
 
     }
 
-    @PutMapping("/remove-task/{idUserToDelete}/{idTaskToDelete}/{idUserDeleter}")
-    public ResponseEntity<Void> removeTaskFromUser(@PathVariable String idUserToDelete, @PathVariable String idUserDeleter, @PathVariable Long idTaskToDelete){
-        userHandler.removeTask(idUserToDelete, idTaskToDelete, idUserDeleter);
-        taskHandler.removeUserTask(idTaskToDelete, idUserToDelete);
-
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-
-    }
-
-    @PutMapping("/assign-task/{idUserToAssign}/{idTaskToAssign}/{idUserAssigner}")
-    public ResponseEntity<Void> assignTaskToUser(@PathVariable String idUserToAssign, @PathVariable String idUserAssigner, @PathVariable Long idTaskToAssign){
-        userHandler.assignTask(idUserToAssign, idTaskToAssign, idUserAssigner);
-        taskHandler.assingUserTask(idTaskToAssign,idUserToAssign);
-
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-    }
+//    @PutMapping("/remove-task/{idUserToDelete}/{idTaskToDelete}/{idUserDeleter}")
+//    public ResponseEntity<Void> removeTaskFromUser(@PathVariable String idUserToDelete, @PathVariable String idUserDeleter, @PathVariable Long idTaskToDelete){
+//        userHandler.removeTask(idUserToDelete, idTaskToDelete, idUserDeleter);
+//        taskHandler.removeUserTask(idTaskToDelete, idUserToDelete);
+//
+//        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+//
+//    }
+//
+//    @PutMapping("/assign-task/{idUserToAssign}/{idTaskToAssign}/{idUserAssigner}")
+//    public ResponseEntity<Void> assignTaskToUser(@PathVariable String idUserToAssign, @PathVariable String idUserAssigner, @PathVariable Long idTaskToAssign){
+//        userHandler.assignTask(idUserToAssign, idTaskToAssign, idUserAssigner);
+//        taskHandler.assingUserTask(idTaskToAssign,idUserToAssign);
+//
+//        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+//    }
 
 
 

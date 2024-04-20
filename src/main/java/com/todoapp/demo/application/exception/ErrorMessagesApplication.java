@@ -1,4 +1,4 @@
-package com.todoapp.demo.application.exception;
+ package com.todoapp.demo.application.exception;
 
 public enum ErrorMessagesApplication {
 
