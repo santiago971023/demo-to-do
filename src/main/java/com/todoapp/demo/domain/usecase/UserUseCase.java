@@ -2,9 +2,8 @@ package com.todoapp.demo.domain.usecase;
 
 import com.todoapp.demo.domain.Role;
 import com.todoapp.demo.domain.api.IUserServicePort;
-import com.todoapp.demo.domain.exception.ErrorMessages;
-import com.todoapp.demo.domain.exception.UserValidationException;
-import com.todoapp.demo.domain.model.Task;
+import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
+import com.todoapp.demo.domain.exception.UserValidationExceptionDomain;
 import com.todoapp.demo.domain.model.User;
 import com.todoapp.demo.domain.spi.IUserPersistencePort;
 
@@ -25,23 +24,23 @@ public class UserUseCase implements IUserServicePort {
 
 
         if (!isValidId(newUser.getId())) {
-            throw new UserValidationException(ErrorMessages.ID_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
         }
         if (!isValidName(newUser.getName())) {
-            throw new UserValidationException(ErrorMessages.NAME_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.NAME_INVALID.getMessage());
         }
         if (!isValidName(newUser.getLastname())) {
-            throw new UserValidationException(ErrorMessages.LASTNAME_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.LASTNAME_INVALID.getMessage());
         }
         if (!isValidEmail(newUser.getEmail())) {
-            throw new UserValidationException(ErrorMessages.EMAIL_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.EMAIL_INVALID.getMessage());
         }
 
         if (!isValidPassword(newUser.getPassword())) {
-            throw new UserValidationException(ErrorMessages.PASSWORD_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.PASSWORD_INVALID.getMessage());
         }
         if (!isValidRole(newUser.getRole().toString())) {
-            throw new UserValidationException(ErrorMessages.ROLE_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.ROLE_INVALID.getMessage());
         }
         userPersistencePort.createUser(newUser);
     }
@@ -49,22 +48,22 @@ public class UserUseCase implements IUserServicePort {
     @Override
     public void updateUser(User userToUpdate) {
         if (!isValidId(userToUpdate.getId())) {
-            throw new UserValidationException(ErrorMessages.ID_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
         }
         if (!isValidName(userToUpdate.getName())) {
-            throw new UserValidationException(ErrorMessages.NAME_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.NAME_INVALID.getMessage());
         }
         if (!isValidName(userToUpdate.getLastname())) {
-            throw new UserValidationException(ErrorMessages.LASTNAME_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.LASTNAME_INVALID.getMessage());
         }
         if (!isValidEmail(userToUpdate.getEmail())) {
-            throw new UserValidationException(ErrorMessages.EMAIL_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.EMAIL_INVALID.getMessage());
         }
         if (!isValidPassword(userToUpdate.getPassword())) {
-            throw new UserValidationException(ErrorMessages.PASSWORD_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.PASSWORD_INVALID.getMessage());
         }
         if (!isValidRole(userToUpdate.getRole().toString())) {
-            throw new UserValidationException(ErrorMessages.ROLE_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.ROLE_INVALID.getMessage());
         }
         User updatedUser = new User(userToUpdate.getName(), userToUpdate.getLastname(), userToUpdate.getEmail(),
                 userToUpdate.getPassword(), userToUpdate.getRole(), userToUpdate.getTasks());
@@ -109,10 +108,10 @@ public class UserUseCase implements IUserServicePort {
     @Override
     public void removeTask(String idUser, Long idTask) {
         if(!isValidId(idUser)){
-            throw new UserValidationException(ErrorMessages.ID_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
         }
         if (!isValidIdTask(idTask) ) {
-            throw  new UserValidationException(ErrorMessages.IDTASK_INVALID.getMessage());
+            throw  new UserValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
         }
 
         userPersistencePort.getUserById(idUser).getTasks().remove(idTask);
@@ -123,10 +122,10 @@ public class UserUseCase implements IUserServicePort {
     @Override
     public void assignTask(String idUser, Long idTask) {
         if(!isValidId(idUser)){
-            throw new UserValidationException(ErrorMessages.ID_INVALID.getMessage());
+            throw new UserValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
         }
         if (!isValidIdTask(idTask) ) {
-            throw  new UserValidationException(ErrorMessages.IDTASK_INVALID.getMessage());
+            throw  new UserValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
         }
 
         userPersistencePort.getUserById(idUser).getTasks().add(idTask);

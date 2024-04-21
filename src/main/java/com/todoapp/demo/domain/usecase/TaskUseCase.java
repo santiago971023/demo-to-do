@@ -2,8 +2,8 @@
 
     import com.todoapp.demo.domain.Status;
     import com.todoapp.demo.domain.api.ITaskServicePort;
-    import com.todoapp.demo.domain.exception.ErrorMessages;
-    import com.todoapp.demo.domain.exception.TaskValidationException;
+    import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
+    import com.todoapp.demo.domain.exception.TaskValidationExceptionDomain;
     import com.todoapp.demo.domain.model.Task;
     import com.todoapp.demo.domain.spi.ITaskPersistencePort;
 
@@ -23,20 +23,24 @@
         public void createTask(Task task) {
 
             if (!isValidTitle(task.getTitle())){
-                throw new TaskValidationException(ErrorMessages.TITLE_INVALID.getMessage());
+                throw new TaskValidationExceptionDomain(ErrorMessagesDomain.TITLE_INVALID.getMessage());
             }
             if(!isValidDescription(task.getDescription())){
 
-                throw new TaskValidationException(ErrorMessages.DESCRIPTION_INVALID.getMessage());
+                throw new TaskValidationExceptionDomain(ErrorMessagesDomain.DESCRIPTION_INVALID.getMessage());
             }
-            if (!isValidStartDate(task.getStartDate())){
-                throw new TaskValidationException(ErrorMessages.STARTDATE_INVALID.getMessage());
-            }
+            /*
+            Nota: Por qué no se valida la fecha de inicio? No se valida ya que al crear una nueva tarea,
+            esta se genera de forma automatica con la fecha actual.
+             */
+            //if (!isValidStartDate(task.getStartDate())){
+              //  throw new TaskValidationException(ErrorMessages.STARTDATE_INVALID.getMessage());
+            //}
             if(!isValidFinishDate(task.getFinishDate())){
-                throw new TaskValidationException(ErrorMessages.FINISHDATE_INVALID.getMessage());
+                throw new TaskValidationExceptionDomain(ErrorMessagesDomain.FINISHDATE_INVALID.getMessage());
             }
             if(!isValidStatus(task.getStatus().name())){
-                throw new TaskValidationException((ErrorMessages.STATUS_INVALID.getMessage()));
+                throw new TaskValidationExceptionDomain((ErrorMessagesDomain.STATUS_INVALID.getMessage()));
             }
 
             taskPersistencePort.createTask(task);
@@ -45,19 +49,20 @@
         @Override
         public void updateTask(Task task) {
             if (!isValidTitle(task.getTitle())){
-                throw new TaskValidationException(ErrorMessages.TITLE_INVALID.getMessage());
+                throw new TaskValidationExceptionDomain(ErrorMessagesDomain.TITLE_INVALID.getMessage());
             }
             if(!isValidDescription(task.getDescription())){
-                throw new TaskValidationException(ErrorMessages.DESCRIPTION_INVALID.getMessage());
+                throw new TaskValidationExceptionDomain(ErrorMessagesDomain.DESCRIPTION_INVALID.getMessage());
             }
+
             if (!isValidStartDate(task.getStartDate())){
-                throw new TaskValidationException(ErrorMessages.STARTDATE_INVALID.getMessage());
+                throw new TaskValidationExceptionDomain(ErrorMessagesDomain.STARTDATE_INVALID.getMessage());
             }
             if(!isValidFinishDate(task.getFinishDate())){
-                throw new TaskValidationException(ErrorMessages.FINISHDATE_INVALID.getMessage());
+                throw new TaskValidationExceptionDomain(ErrorMessagesDomain.FINISHDATE_INVALID.getMessage());
             }
             if(!isValidStatus(task.getStatus().name())){
-                throw new TaskValidationException((ErrorMessages.STATUS_INVALID.getMessage()));
+                throw new TaskValidationExceptionDomain((ErrorMessagesDomain.STATUS_INVALID.getMessage()));
             }
             taskPersistencePort.updateTask(task);
 
@@ -102,11 +107,11 @@
         @Override
         public void updateTaskStatus(Long taskId,String status) {
             if (!isValidIdTask(taskId)){
-                throw new TaskValidationException(ErrorMessages.IDTASK_INVALID.getMessage());
+                throw new TaskValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
 
             }
             if (!isValidStatus(status)){
-                throw new TaskValidationException(ErrorMessages.STATUS_INVALID.getMessage());
+                throw new TaskValidationExceptionDomain(ErrorMessagesDomain.STATUS_INVALID.getMessage());
             }
 
             taskPersistencePort.updateTaskStatus(taskId, status);
@@ -169,9 +174,15 @@
         }
 
         public boolean isValidFinishDate(LocalDate finishDate){
+
             if (finishDate == null || finishDate.toString().isEmpty()){
                 return false;
             }
+
+            if(finishDate.isBefore(LocalDate.now())){
+                return false;
+            }
+
             return true;
         }
         //String fechaString = "2024-03-05";

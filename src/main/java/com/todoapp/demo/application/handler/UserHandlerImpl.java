@@ -8,8 +8,6 @@ import com.todoapp.demo.application.mapper.IUserRequestMapper;
 import com.todoapp.demo.application.mapper.IUserResponseMapper;
 import com.todoapp.demo.domain.Role;
 import com.todoapp.demo.domain.api.IUserServicePort;
-import com.todoapp.demo.domain.exception.ErrorMessages;
-import com.todoapp.demo.domain.model.Task;
 import com.todoapp.demo.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

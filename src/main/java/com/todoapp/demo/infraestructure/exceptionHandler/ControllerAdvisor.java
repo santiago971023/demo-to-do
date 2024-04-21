@@ -2,6 +2,8 @@ package com.todoapp.demo.infraestructure.exceptionHandler;
 
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
 import com.todoapp.demo.application.exception.UserValidationException;
+import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
+import com.todoapp.demo.domain.exception.TaskValidationExceptionDomain;
 import com.todoapp.demo.infraestructure.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +54,11 @@ public class ControllerAdvisor {
     public ResponseEntity<Map<String, String>> userCantCreateAnotherUser(UserValidationException userValidationException){
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_CREATE.getMessage()));
+    }
+
+    @ExceptionHandler(TaskValidationExceptionDomain.class)
+    public ResponseEntity<Map<String, String>> finishDateCannotBeBeforeThatStartDate(TaskValidationExceptionDomain taskValidationExceptionDomain){
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(MESSAGE, ErrorMessagesDomain.FINISHDATE_INVALID.getMessage()));
     }
 }

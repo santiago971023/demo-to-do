@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class UserJpaAdapter implements IUserPersistencePort {
@@ -30,9 +31,6 @@ public class UserJpaAdapter implements IUserPersistencePort {
             if(userRepository.findById(newUser.getId()).isPresent()){
                 throw new UserAlreadyExistsException();
             }
-
-
-
             UserEntity userEntity = userEntityMapper.toEntity(newUser);
             userRepository.save(userEntity);
         }catch(UserAlreadyExistsException e) {
@@ -53,26 +51,44 @@ public class UserJpaAdapter implements IUserPersistencePort {
 
     @Override
     public void updateUser(User userToUpdate) {
-        if (userRepository.findById(userToUpdate.getId()).isEmpty()){
-            throw new UserNotFoundException();
+        try {
+            if (userRepository.findById(userToUpdate.getId()).isEmpty()) {
+                throw new UserNotFoundException();
+            }
+            userRepository.save(userEntityMapper.toEntity(userToUpdate));
+        } catch (UserNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ExceptionResponse.USER_NOT_FOUND.getMessage(), e);
+
+
+        } catch (UserValidationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_UPDATE.getMessage(), e);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al actualizar usuario", e);
         }
-
-        userRepository.save(userEntityMapper.toEntity(userToUpdate));
     }
-
     @Override
     public void deleteUser(String id) {
-        userRepository.deleteById(id);
+        try{
+            if(userRepository.findById(id).isEmpty()){
+                throw new UserNotFoundException();
+            }
+            userRepository.deleteById(id);
+
+        }catch(UserNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ExceptionResponse.USER_NOT_FOUND.getMessage(), e);
+        }catch (UserValidationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_DELETE.getMessage(), e);
+
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al eliminar usuario", e);
+        }
     }
 
     @Override
     public List<User> getUsersByName(String name) {
-
         if(userRepository.findByName(name).isEmpty()){
-            System.out.println("Esta entrando a la validacion");
-            throw new NoDataFoundException();
+           throw new NoDataFoundException();
         }
-
         List<UserEntity> userEntityList = userRepository.findByName(name).get();
         return userEntityMapper.toUserList(userEntityList);
     }

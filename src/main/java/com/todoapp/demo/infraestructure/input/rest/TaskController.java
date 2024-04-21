@@ -92,9 +92,14 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
+    @GetMapping("/task-by-month/{numberMonth}")
+    public ResponseEntity<List<TaskResponseDto>> getTasksByMonth(@PathVariable Integer numberMonth){
+        return ResponseEntity.ok(taskHandler.getTasksByMonth(numberMonth));
+    }
 
 
-   
+
+
 
 
 

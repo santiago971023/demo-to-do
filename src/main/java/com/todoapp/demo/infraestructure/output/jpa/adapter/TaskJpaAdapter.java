@@ -1,19 +1,22 @@
 package com.todoapp.demo.infraestructure.output.jpa.adapter;
 
+import com.todoapp.demo.application.exception.ErrorMessagesApplication;
+import com.todoapp.demo.application.exception.TaskValidationException;
+import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
+import com.todoapp.demo.domain.exception.TaskValidationExceptionDomain;
 import com.todoapp.demo.domain.model.Task;
-import com.todoapp.demo.domain.model.User;
 import com.todoapp.demo.domain.spi.ITaskPersistencePort;
 import com.todoapp.demo.infraestructure.exception.NoDataFoundException;
 import com.todoapp.demo.infraestructure.exception.TaskAlreadyExistsException;
 import com.todoapp.demo.infraestructure.exception.TaskNotFoundException;
-import com.todoapp.demo.infraestructure.exception.UserNotFoundException;
+import com.todoapp.demo.infraestructure.exceptionHandler.ExceptionResponse;
 import com.todoapp.demo.infraestructure.output.jpa.entities.TaskEntity;
 import com.todoapp.demo.infraestructure.output.jpa.mapper.ITaskEntityMapper;
-import com.todoapp.demo.infraestructure.output.jpa.mapper.IUserEntityMapper;
 import com.todoapp.demo.infraestructure.output.jpa.repository.ITaskRepository;
-import com.todoapp.demo.infraestructure.output.jpa.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,29 +26,61 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
 
     private final ITaskRepository taskRepository;
     private final ITaskEntityMapper taskEntityMapper;
-    private final IUserRepository userRepository;
-    private final IUserEntityMapper userEntityMapper;
+
 
 
     @Override
     public void createTask(Task task) {
-        if (taskRepository.findById(task.getId()).isPresent()){
-            throw new TaskAlreadyExistsException();
+        try {
+            if (taskRepository.findById(task.getId()).isPresent()) {
+                throw new TaskAlreadyExistsException();
+            }
+            taskRepository.save(taskEntityMapper.toEntity(task));
+
+        } catch (TaskAlreadyExistsException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ExceptionResponse.TASK_ALREADY_EXISTS.getMessage(), e);
+        }catch (TaskValidationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_CREATE_TASK.getMessage(), e);
+        }catch (TaskValidationExceptionDomain e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesDomain.FINISHDATE_INVALID.getMessage(), e);
+        }catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al crear tarea", e);
         }
-        taskRepository.save(taskEntityMapper.toEntity(task));
     }
 
     @Override
     public void updateTask(Task task) {
-        if(taskRepository.findById(task.getId()).isEmpty()){
-            throw new TaskNotFoundException();
+        try{
+            if(taskRepository.findById(task.getId()).isEmpty()){
+                throw new TaskNotFoundException();
+            }
+            taskRepository.save(taskEntityMapper.toEntity(task));
+        }catch (TaskNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ExceptionResponse.TASK_NOT_FOUND.getMessage(), e);
+        }catch (TaskValidationException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_UPDATE_TASK.getMessage(), e);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al actualizar tarea", e);
         }
-        taskRepository.save(taskEntityMapper.toEntity(task));
+
     }
 
     @Override
     public void deleteTask(Long taskId) {
-        taskRepository.deleteById(taskId);
+        try {
+            if (taskRepository.findById(taskId).isEmpty()) {
+                throw new TaskNotFoundException();
+            }
+            taskRepository.deleteById(taskId);
+        } catch (TaskNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ExceptionResponse.TASK_NOT_FOUND.getMessage(), e);
+        } catch (TaskValidationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_DELETE_TASK.getMessage(), e);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al eliminar tarea", e);
+
+        }
     }
 
     @Override
@@ -57,8 +92,6 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
         task.setIdUsers(userIdsOfTask);
 
         return task;
-
-        //return taskEntityMapper.toTask(taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new));
     }
 
     @Override
@@ -108,5 +141,9 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
     public void assignUser(Long taskId, String userId) {
 
        taskRepository.assignTaskToUser(userId, taskId);
+    }
+    @Override
+    public List<Task> getTasksByMonth(Integer numberMonth){
+        return taskEntityMapper.toTaskList(taskRepository.findTasksByMonth(numberMonth).orElseThrow(NoDataFoundException::new));
     }
 }

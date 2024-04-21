@@ -29,6 +29,8 @@ public interface ITaskHandler {
 
     List<TaskResponseDto> getTaskByStatus(String status);
 
+    List<TaskResponseDto> getTasksByMonth(Integer numberMonth);
+
     void removeUserTask(Long idTask, String idUserToDelete);
     void assingUserTask(Long idTask, String idUserToAssing);
 

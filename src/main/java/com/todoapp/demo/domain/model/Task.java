@@ -24,22 +24,22 @@ public class Task {
 
     private List<String> idUsers;
 
-    public Task(long id, String title, String description, LocalDate startDate, LocalDate finishDate, Status status,
+    public Task(long id, String title, String description, LocalDate finishDate, Status status,
                 Integer historyPoints, List<String> idUsers) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.startDate = startDate;
+        this.startDate = LocalDate.now();
         this.finishDate = finishDate;
         this.status = status;
         this.historyPoints = historyPoints;
         this.idUsers = idUsers;
     }
 
-    public Task(String title, String description, LocalDate startDate, LocalDate finishDate, Status status, Integer historyPoints) {
+    public Task(String title, String description,  LocalDate finishDate, Status status, Integer historyPoints) {
         this.title = title;
         this.description = description;
-        this.startDate = startDate;
+        //this.startDate = startDate;
         this.finishDate = finishDate;
         this.status = status;
         this.historyPoints = historyPoints;

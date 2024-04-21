@@ -1,6 +1,6 @@
 package com.todoapp.demo.domain.exception;
 
-public enum ErrorMessages {
+public enum ErrorMessagesDomain {
 
     //  USERS
     ID_INVALID("Id cannot be null or empty."),
@@ -17,14 +17,15 @@ public enum ErrorMessages {
     TITLE_INVALID("The title cannot be null or empty. "),
     DESCRIPTION_INVALID("The description cannot be null or empty. "),
     STARTDATE_INVALID("The startDate cannot be null or empty. "),
-    FINISHDATE_INVALID("The startDate cannot be null or empty. "),
+
+    FINISHDATE_INVALID("The finishDate cannot be null or empty, neither before the initial date."),
     STATUS_INVALID("The status cannot be null or empty."),
     HISTORYPOINTS_NULL("The value of history points cannot be null or empty, and must be an integer.");
 
 
     private final String message;
 
-    ErrorMessages(String message) {
+    ErrorMessagesDomain(String message) {
         this.message = message;
     }
 

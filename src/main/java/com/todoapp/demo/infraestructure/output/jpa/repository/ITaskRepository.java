@@ -1,6 +1,7 @@
 package com.todoapp.demo.infraestructure.output.jpa.repository;
 
 import com.todoapp.demo.domain.Status;
+import com.todoapp.demo.domain.model.Task;
 import com.todoapp.demo.infraestructure.output.jpa.entities.TaskEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,9 @@ import java.util.Optional;
 public interface ITaskRepository extends JpaRepository<TaskEntity, Long> {
 
     Optional<List<TaskEntity>> findByStartDate(LocalDate startDate);
+
+    @Query("SELECT t FROM TaskEntity t WHERE MONTH(t.startDate) = :numberMonth")
+    Optional<List<TaskEntity>> findTasksByMonth(Integer numberMonth);
 
     Optional<List<TaskEntity>> findByFinishDate(LocalDate startDate);
 

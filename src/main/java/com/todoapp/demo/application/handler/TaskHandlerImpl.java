@@ -9,9 +9,8 @@ import com.todoapp.demo.domain.Role;
 import com.todoapp.demo.domain.Status;
 import com.todoapp.demo.domain.api.ITaskServicePort;
 import com.todoapp.demo.domain.api.IUserServicePort;
-import com.todoapp.demo.domain.exception.TaskValidationException;
+import com.todoapp.demo.domain.exception.TaskValidationExceptionDomain;
 import com.todoapp.demo.domain.model.Task;
-import com.todoapp.demo.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -36,7 +36,7 @@ public class TaskHandlerImpl implements ITaskHandler{
     @Override
     public void createTask(TaskRequestDto taskRequestDtoToCreate, String idUserCreator) {
         if(!canCreateTask(taskRequestDtoToCreate, idUserCreator)){
-            throw new TaskValidationException(ErrorMessagesApplication.CANT_CREATE_TASK.getMessage());
+            throw new TaskValidationExceptionDomain(ErrorMessagesApplication.CANT_CREATE_TASK.getMessage());
         }
         Task taskToCreate = taskRequestMapper.toTask(taskRequestDtoToCreate);
         taskServicePort.createTask(taskToCreate);
@@ -45,7 +45,7 @@ public class TaskHandlerImpl implements ITaskHandler{
     @Override
     public void updateTask(TaskRequestDto taskRequestDtoToUpdate, String idUserUpdater) {
         if(!canUpdateTask(taskRequestDtoToUpdate, idUserUpdater)){
-            throw new TaskValidationException(ErrorMessagesApplication.CANT_UPDATE_TASK.getMessage());
+            throw new TaskValidationExceptionDomain(ErrorMessagesApplication.CANT_UPDATE_TASK.getMessage());
         }
         Task taskToUpdate = taskRequestMapper.toTask(taskRequestDtoToUpdate);
         taskServicePort.updateTask(taskToUpdate);
@@ -55,7 +55,7 @@ public class TaskHandlerImpl implements ITaskHandler{
     @Override
     public void deleteTask(Long idTaskToDelete, String idDeleter) {
         if(!canDeleteTask(idTaskToDelete, idDeleter)){
-            throw new TaskValidationException(ErrorMessagesApplication.CANT_DELETE_TASK.getMessage());
+            throw new TaskValidationExceptionDomain(ErrorMessagesApplication.CANT_DELETE_TASK.getMessage());
         }
         taskServicePort.deleteTask(idTaskToDelete);
     }
@@ -63,7 +63,7 @@ public class TaskHandlerImpl implements ITaskHandler{
     @Override
     public void updateStatusTask(String status, String idUpdater, Long idTaskUpdate) {
         if (!canUpdateStatusTask(status, idUpdater, idTaskUpdate)){
-            throw new TaskValidationException(ErrorMessagesApplication.CANT_UPDATE_STATUS_TASK.getMessage());
+            throw new TaskValidationExceptionDomain(ErrorMessagesApplication.CANT_UPDATE_STATUS_TASK.getMessage());
         }
         taskServicePort.updateTaskStatus(idTaskUpdate, status);
 
@@ -111,6 +111,7 @@ public class TaskHandlerImpl implements ITaskHandler{
                 tasksWithStatus.add(task);
             }
         }
+
         return taskResponseMapper.toTaskResponseList(tasksWithStatus);
 
     }
@@ -118,7 +119,7 @@ public class TaskHandlerImpl implements ITaskHandler{
     @Override
     public void removeUserTask(Long idTask, String idUserToDelete) {
         if (!existUserOnTask(idUserToDelete, idTask)){
-            throw new TaskValidationException(ErrorMessagesApplication.ID_USER_NOTFOUND_IN_TASK.getMessage());
+            throw new TaskValidationExceptionDomain(ErrorMessagesApplication.ID_USER_NOTFOUND_IN_TASK.getMessage());
         }
         taskServicePort.getTaskById(idTask).getIdUsers().remove(idUserToDelete);
     }
@@ -126,9 +127,19 @@ public class TaskHandlerImpl implements ITaskHandler{
     @Override
     public void assingUserTask(Long idTask, String idUserToAssing) {
         if (existUserOnTask(idUserToAssing, idTask)){
-            throw new TaskValidationException(ErrorMessagesApplication.ID_USER_ALREADY_EXIST_ON_TASK.getMessage());
+            throw new TaskValidationExceptionDomain(ErrorMessagesApplication.ID_USER_ALREADY_EXIST_ON_TASK.getMessage());
         }
         taskServicePort.getTaskById(idTask).getIdUsers().add(idUserToAssing);
+    }
+
+    @Override
+   public List<TaskResponseDto> getTasksByMonth(Integer numberMonth){
+        List<Task> allTasks = taskServicePort.getAllTasks();
+        List<TaskResponseDto> taskResponseDtoList = taskResponseMapper.toTaskResponseList(allTasks);
+
+        return taskResponseDtoList.stream()
+                .filter(task -> task.getStartDate().getMonth().getValue()==numberMonth)
+                .collect(Collectors.toList());
     }
 
 

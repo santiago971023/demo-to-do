@@ -40,6 +40,11 @@ public class TaskEntity     {
     @Column(name = "history_points", nullable = false)
     private Integer historyPoints;
 
+    @PrePersist
+    public void prePersist() {
+        this.startDate = LocalDate.now();
+    }
+
 
     @ElementCollection
     @CollectionTable(name = "user_task", joinColumns = @JoinColumn(name = "task_id"))

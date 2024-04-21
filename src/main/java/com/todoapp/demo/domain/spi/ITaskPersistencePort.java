@@ -1,5 +1,6 @@
 package com.todoapp.demo.domain.spi;
 
+import com.todoapp.demo.application.dto.response.TaskResponseDto;
 import com.todoapp.demo.domain.model.Task;
 import com.todoapp.demo.domain.model.User;
 
@@ -31,5 +32,7 @@ public interface ITaskPersistencePort {
     void removeUser(Long taskId, String userId);
 
     void assignUser(Long taskId, String userId);
+
+    List<Task> getTasksByMonth(Integer numberMonth);
 
 }

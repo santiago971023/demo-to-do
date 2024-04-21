@@ -59,7 +59,7 @@ public class BeanConfiguration {
 
     @Bean
     public ITaskPersistencePort taskPersistencePort(){
-        return new TaskJpaAdapter(taskRepository, taskEntityMapper, userRepository, userEntityMapper);
+        return new TaskJpaAdapter(taskRepository, taskEntityMapper);
     }
     @Bean
     public ITaskServicePort taskServicePort(){
