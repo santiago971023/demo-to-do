@@ -3,7 +3,7 @@ package com.todoapp.demo.infraestructure.output.jpa.adapter;
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
 import com.todoapp.demo.application.exception.UserValidationException;
 import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
-import com.todoapp.demo.domain.exception.UserValidationExceptionDomain;
+import com.todoapp.demo.domain.exception.user.UserValidationExceptionDomain;
 import com.todoapp.demo.domain.model.User;
 import com.todoapp.demo.domain.spi.IUserPersistencePort;
 import com.todoapp.demo.infraestructure.exception.NoDataFoundException;
@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 public class UserJpaAdapter implements IUserPersistencePort {
@@ -40,7 +39,7 @@ public class UserJpaAdapter implements IUserPersistencePort {
         }catch(UserValidationException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_CREATE.getMessage(), e);
         }catch (UserValidationExceptionDomain e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesDomain.PASSWORD_INVALID.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
         catch(Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al crear usuario", e);

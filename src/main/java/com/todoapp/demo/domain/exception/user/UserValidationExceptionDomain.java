@@ -1,4 +1,4 @@
-package com.todoapp.demo.domain.exception;
+package com.todoapp.demo.domain.exception.user;
 
 public class UserValidationExceptionDomain extends RuntimeException{
 

@@ -9,7 +9,7 @@ import com.todoapp.demo.domain.Role;
 import com.todoapp.demo.domain.Status;
 import com.todoapp.demo.domain.api.ITaskServicePort;
 import com.todoapp.demo.domain.api.IUserServicePort;
-import com.todoapp.demo.domain.exception.TaskValidationExceptionDomain;
+import com.todoapp.demo.domain.exception.task.TaskValidationExceptionDomain;
 import com.todoapp.demo.domain.model.Task;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

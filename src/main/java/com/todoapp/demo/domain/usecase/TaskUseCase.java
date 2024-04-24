@@ -3,7 +3,7 @@
     import com.todoapp.demo.domain.Status;
     import com.todoapp.demo.domain.api.ITaskServicePort;
     import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
-    import com.todoapp.demo.domain.exception.TaskValidationExceptionDomain;
+    import com.todoapp.demo.domain.exception.task.TaskValidationExceptionDomain;
     import com.todoapp.demo.domain.model.Task;
     import com.todoapp.demo.domain.spi.ITaskPersistencePort;
 

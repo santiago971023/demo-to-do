@@ -3,8 +3,7 @@ package com.todoapp.demo.domain.usecase;
 import com.todoapp.demo.domain.Role;
 import com.todoapp.demo.domain.api.IUserServicePort;
 import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
-import com.todoapp.demo.domain.exception.PasswordValidationExceptionDomain;
-import com.todoapp.demo.domain.exception.UserValidationExceptionDomain;
+import com.todoapp.demo.domain.exception.user.*;
 import com.todoapp.demo.domain.model.User;
 import com.todoapp.demo.domain.spi.IUserPersistencePort;
 
@@ -25,23 +24,22 @@ public class UserUseCase implements IUserServicePort {
 
 
         if (!isValidId(newUser.getId())) {
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
+            throw new IdValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
         }
         if (!isValidName(newUser.getName())) {
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.NAME_INVALID.getMessage());
+            throw new NameValidationExceptionDomain(ErrorMessagesDomain.NAME_INVALID.getMessage());
         }
         if (!isValidName(newUser.getLastname())) {
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.LASTNAME_INVALID.getMessage());
+            throw new LastNameValidationExceptionDomain(ErrorMessagesDomain.LASTNAME_INVALID.getMessage());
         }
         if (!isValidEmail(newUser.getEmail())) {
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.EMAIL_INVALID.getMessage());
+            throw new EmailValidationExceptionDomain(ErrorMessagesDomain.EMAIL_INVALID.getMessage());
         }
-
         if (!isValidPassword(newUser.getPassword())) {
             throw new PasswordValidationExceptionDomain(ErrorMessagesDomain.PASSWORD_INVALID.getMessage());
         }
         if (!isValidRole(newUser.getRole().toString())) {
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.ROLE_INVALID.getMessage());
+            throw new RoleValidationExceptionDomain(ErrorMessagesDomain.ROLE_INVALID.getMessage());
         }
         userPersistencePort.createUser(newUser);
     }

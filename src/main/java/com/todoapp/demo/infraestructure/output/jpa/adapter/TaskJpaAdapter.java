@@ -3,7 +3,7 @@ package com.todoapp.demo.infraestructure.output.jpa.adapter;
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
 import com.todoapp.demo.application.exception.TaskValidationException;
 import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
-import com.todoapp.demo.domain.exception.TaskValidationExceptionDomain;
+import com.todoapp.demo.domain.exception.task.TaskValidationExceptionDomain;
 import com.todoapp.demo.domain.model.Task;
 import com.todoapp.demo.domain.spi.ITaskPersistencePort;
 import com.todoapp.demo.infraestructure.exception.NoDataFoundException;

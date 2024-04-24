@@ -1,4 +1,4 @@
-package com.todoapp.demo.domain.exception;
+package com.todoapp.demo.domain.exception.task;
 
 public class TaskValidationExceptionDomain extends RuntimeException {
 
