@@ -3,12 +3,17 @@ package com.todoapp.demo.infraestructure.exceptionHandler;
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
 import com.todoapp.demo.application.exception.UserValidationException;
 import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
+import com.todoapp.demo.domain.exception.PasswordValidationExceptionDomain;
 import com.todoapp.demo.domain.exception.TaskValidationExceptionDomain;
+import com.todoapp.demo.domain.exception.UserValidationExceptionDomain;
 import com.todoapp.demo.infraestructure.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Collections;
 import java.util.Map;
@@ -60,5 +65,13 @@ public class ControllerAdvisor {
     public ResponseEntity<Map<String, String>> finishDateCannotBeBeforeThatStartDate(TaskValidationExceptionDomain taskValidationExceptionDomain){
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(MESSAGE, ErrorMessagesDomain.FINISHDATE_INVALID.getMessage()));
+    }
+
+
+    @ExceptionHandler(UserValidationExceptionDomain.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorResponse passwordInvalid(PasswordValidationExceptionDomain validationExceptionDomain){
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), validationExceptionDomain.getMessage());
     }
 }

@@ -3,15 +3,10 @@ package com.todoapp.demo.application.dto.request;
 import com.todoapp.demo.domain.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class UserRequestDto {
 
     @NotBlank(message = "Id field must not be empty")
@@ -23,6 +18,7 @@ public class UserRequestDto {
     @NotBlank(message = "Lastname field must not be empty")
     private String lastname;
 
+    @NotBlank(message = "Email field must not be empty")
     @Email(message = "Email field must not be empty")
     private String email;
 
@@ -32,6 +28,14 @@ public class UserRequestDto {
     @NotBlank(message = "Role field must not be empty")
     private Role role;
 
-    @NotNull(message = "Tasks field must not be null")
-    private List<Long> tasks;
+//    @ApiModelProperty(notes = "Lista de tareas del usuario", example = "[]")
+//      private List<Long> tasks;
+
+
+
+
+
+
+
+
 }

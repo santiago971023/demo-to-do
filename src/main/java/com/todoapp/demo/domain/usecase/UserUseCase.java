@@ -3,6 +3,7 @@ package com.todoapp.demo.domain.usecase;
 import com.todoapp.demo.domain.Role;
 import com.todoapp.demo.domain.api.IUserServicePort;
 import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
+import com.todoapp.demo.domain.exception.PasswordValidationExceptionDomain;
 import com.todoapp.demo.domain.exception.UserValidationExceptionDomain;
 import com.todoapp.demo.domain.model.User;
 import com.todoapp.demo.domain.spi.IUserPersistencePort;
@@ -37,7 +38,7 @@ public class UserUseCase implements IUserServicePort {
         }
 
         if (!isValidPassword(newUser.getPassword())) {
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.PASSWORD_INVALID.getMessage());
+            throw new PasswordValidationExceptionDomain(ErrorMessagesDomain.PASSWORD_INVALID.getMessage());
         }
         if (!isValidRole(newUser.getRole().toString())) {
             throw new UserValidationExceptionDomain(ErrorMessagesDomain.ROLE_INVALID.getMessage());

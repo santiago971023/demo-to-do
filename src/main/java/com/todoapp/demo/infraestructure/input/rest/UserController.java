@@ -7,6 +7,7 @@ import com.todoapp.demo.application.exception.ErrorMessagesApplication;
 import com.todoapp.demo.application.exception.UserValidationException;
 import com.todoapp.demo.application.handler.ITaskHandler;
 import com.todoapp.demo.application.handler.IUserHandler;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +27,17 @@ public class UserController {
     //User
     @PostMapping("/save/{idCreator}")
     public ResponseEntity<Void> saveUser(@RequestBody UserRequestDto userRequestDtoToCreate, @PathVariable String idCreator) {
-//        try{
-//            userHandler.createUser(userRequestDtoToCreate, idCreator);
-//            return ResponseEntity.status(HttpStatus.CREATED).build();
-//        }catch(UserValidationException e){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_CREATE.getMessage(), e);
-//        }
                  userHandler.createUser(userRequestDtoToCreate, idCreator);
            return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    /**
+     * Metodo para actualizar un usuario
+     * @param userRequestDto
+     * @param idUpdater
+     * @return
+     */
+    @ApiOperation(value = "Actualiza un usuario existente")
     @PutMapping("/update/{idUpdater}")
     public ResponseEntity<Void> updateUser(@RequestBody UserRequestDto userRequestDto, @PathVariable String idUpdater){
         userHandler.updateUser(userRequestDto, idUpdater);

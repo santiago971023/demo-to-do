@@ -2,6 +2,8 @@ package com.todoapp.demo.infraestructure.output.jpa.adapter;
 
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
 import com.todoapp.demo.application.exception.UserValidationException;
+import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
+import com.todoapp.demo.domain.exception.UserValidationExceptionDomain;
 import com.todoapp.demo.domain.model.User;
 import com.todoapp.demo.domain.spi.IUserPersistencePort;
 import com.todoapp.demo.infraestructure.exception.NoDataFoundException;
@@ -37,16 +39,12 @@ public class UserJpaAdapter implements IUserPersistencePort {
             throw new ResponseStatusException(HttpStatus.CONFLICT, ExceptionResponse.USER_ALREADY_EXISTS.getMessage(), e);
         }catch(UserValidationException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_CREATE.getMessage(), e);
+        }catch (UserValidationExceptionDomain e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesDomain.PASSWORD_INVALID.getMessage(), e);
         }
         catch(Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al crear usuario", e);
         }
-
-//        if(userRepository.findById(newUser.getId()).isPresent()){
-//            throw new UserAlreadyExistsException();
-//        }
-//
-//        userRepository.save(userEntityMapper.toEntity(newUser));
     }
 
     @Override
