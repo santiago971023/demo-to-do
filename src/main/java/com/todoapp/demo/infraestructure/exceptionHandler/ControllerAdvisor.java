@@ -3,6 +3,7 @@ package com.todoapp.demo.infraestructure.exceptionHandler;
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
 import com.todoapp.demo.application.exception.UserValidationException;
 import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
+import com.todoapp.demo.domain.exception.task.user.*;
 import com.todoapp.demo.domain.exception.user.*;
 import com.todoapp.demo.domain.exception.task.TaskValidationExceptionDomain;
 import com.todoapp.demo.infraestructure.exception.*;
@@ -91,5 +92,14 @@ public class ControllerAdvisor {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Collections.singletonMap(MESSAGE, "Error inesperado"));
+    }
+
+    @ExceptionHandler(TaskValidationExceptionDomain.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> handlerTaskDomainException(TaskValidationExceptionDomain e) {
+        if (e instanceof )
+
+
     }
 }

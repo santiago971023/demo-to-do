@@ -2,7 +2,6 @@ package com.todoapp.demo.infraestructure.output.jpa.adapter;
 
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
 import com.todoapp.demo.application.exception.UserValidationException;
-import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
 import com.todoapp.demo.domain.exception.user.UserValidationExceptionDomain;
 import com.todoapp.demo.domain.model.User;
 import com.todoapp.demo.domain.spi.IUserPersistencePort;
