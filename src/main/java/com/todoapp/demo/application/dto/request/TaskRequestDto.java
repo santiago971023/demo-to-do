@@ -15,18 +15,17 @@ import java.util.List;
 @NoArgsConstructor
 public class TaskRequestDto {
 
-    @NotBlank(message = "Id field must not be empty")
-    private long id;
 
     @NotBlank(message = "Title field must not be empty")
     private String title;
 
     @NotBlank(message = "Description field must not be empty")
     private String description;
-
+/*
+Nota: Como la fecha se inicaliza automaticamente, no es necesario que el usuario la ingrese, por lo que se comenta
     @NotBlank(message = "StartDate field must not be empty")
     private LocalDate startDate;
-
+*/
     @NotBlank(message = "FinishDate field must not be empty")
     private LocalDate finishDate;
 
@@ -36,6 +35,5 @@ public class TaskRequestDto {
     @NotBlank(message = "History points field must not be empty")
     private Integer historyPoints;
 
-    @Nullable
-    private List<String> idUsers;
+
 }

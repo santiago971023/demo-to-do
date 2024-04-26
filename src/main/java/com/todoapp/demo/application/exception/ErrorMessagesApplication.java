@@ -1,6 +1,9 @@
  package com.todoapp.demo.application.exception;
 
-public enum ErrorMessagesApplication {
+ import lombok.Getter;
+
+ @Getter
+ public enum ErrorMessagesApplication {
 
     //  USERS
     CANT_CREATE("No tienes permisos para crear un nuevo usuario"),
@@ -29,7 +32,4 @@ public enum ErrorMessagesApplication {
         this.message = message;
     }
 
-    public String getMessage() {
-        return message;
-    }
-}
+ }

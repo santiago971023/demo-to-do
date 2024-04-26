@@ -15,7 +15,7 @@ public enum ErrorMessagesDomain {
     //   TASK
     IDTASK_INVALID("IdTask cannot be null or empty."),
     TITLE_INVALID("The title cannot be null or empty. "),
-    DESCRIPTION_INVALID("The description cannot be null or empty. "),
+    DESCRIPTION_INVALID("The description must contain more than 15 characters"),
     STARTDATE_INVALID("The startDate cannot be null or empty. "),
 
     FINISHDATE_INVALID("The finishDate cannot be null or empty, neither before the initial date."),

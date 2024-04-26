@@ -41,8 +41,6 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
             throw new ResponseStatusException(HttpStatus.CONFLICT, ExceptionResponse.TASK_ALREADY_EXISTS.getMessage(), e);
         }catch (TaskValidationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_CREATE_TASK.getMessage(), e);
-        }catch (TaskValidationExceptionDomain e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesDomain.FINISHDATE_INVALID.getMessage(), e);
         }catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al crear tarea", e);
         }

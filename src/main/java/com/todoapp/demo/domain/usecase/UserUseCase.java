@@ -3,7 +3,6 @@ package com.todoapp.demo.domain.usecase;
 import com.todoapp.demo.domain.Role;
 import com.todoapp.demo.domain.api.IUserServicePort;
 import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
-import com.todoapp.demo.domain.exception.task.user.*;
 import com.todoapp.demo.domain.exception.user.*;
 import com.todoapp.demo.domain.model.User;
 import com.todoapp.demo.domain.spi.IUserPersistencePort;
