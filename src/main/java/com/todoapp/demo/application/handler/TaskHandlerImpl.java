@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +55,6 @@ public class TaskHandlerImpl implements ITaskHandler{
         taskToUpdate.setStartDate(taskServicePort.getTaskById(taskRequestDtoToUpdate.getId()).getStartDate());
         taskServicePort.updateTask(taskToUpdate);
     }
-
     @Override
     public void deleteTask(Long idTaskToDelete, String idDeleter) {
         if(!canDeleteTask(idTaskToDelete, idDeleter)){
@@ -62,13 +62,19 @@ public class TaskHandlerImpl implements ITaskHandler{
         }
         taskServicePort.deleteTask(idTaskToDelete);
     }
-
     @Override
     public void updateStatusTask(String status, String idUpdater, Long idTaskUpdate) {
         if (!canUpdateStatusTask(status, idUpdater, idTaskUpdate)){
             throw new CantUpdateTaskValidationException(ErrorMessagesApplication.CANT_UPDATE_STATUS_TASK.getMessage());
         }
-        taskServicePort.updateTaskStatus(idTaskUpdate, status);
+        //taskServicePort.updateTaskStatus(idTaskUpdate, status);
+        Task task = taskServicePort.getTaskById(idTaskUpdate);
+
+        if(Arrays.stream(Status.values()).anyMatch(s -> s.toString().equalsIgnoreCase(status))){
+            task.setStatus(Status.valueOf(status.toUpperCase()));
+            System.out.println("Se identifica correctamente el status");
+        }
+        taskServicePort.updateTask(task);
     }
 
     @Override
@@ -168,12 +174,16 @@ public class TaskHandlerImpl implements ITaskHandler{
 
     public boolean canUpdateStatusTask(String status, String idUpdater, Long idTaskUpdate){
         Task task = taskServicePort.getTaskById(idTaskUpdate);
-        if (task != null && status.equals(Status.COMPLETED.name()) && userServicePort.getUserById(idUpdater).getRole() == Role.ADMIN ){
+        System.out.println("task: "+ task.toString());
+        if (task != null && status.equalsIgnoreCase(Status.COMPLETED.toString()) && userServicePort.getUserById(idUpdater).getRole() == Role.LEADER ){
+            System.out.println("Admin updating status to COMPLETED");
             return true;
         }
-        if(task != null && (status.equals(Status.IN_PROGRESS.name()) || status.equals(Status.REVISION.name())) && task.getIdUsers().contains(idUpdater)){
+        if(task != null && (status.equalsIgnoreCase(Status.IN_PROGRESS.toString()) || status.equalsIgnoreCase(Status.REVISION.toString())) && task.getIdUsers().contains(idUpdater)){
+            System.out.println("User updating status to IN_PROGRESS or REVISION");
             return true;
         }
+        System.out.println("Cannot update status");
         return  false;
     }
 

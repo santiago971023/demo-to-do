@@ -49,6 +49,18 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(MESSAGE, ExceptionResponse.TASK_NOT_FOUND.getMessage()));
     }
 
+    @ExceptionHandler(CantAssignTaskToUserValidationException.class)
+    public ResponseEntity<Map<String, String>> handlerCantAssignValidationException(CantAssignTaskToUserValidationException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_ASSIGN_TASK.getMessage()));
+    }
+
+    @ExceptionHandler(CantRemoveTaskFromUserValidationException.class)
+    public ResponseEntity<Map<String, String>> handlerCantRemoveValidationException(CantRemoveTaskFromUserValidationException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_REMOVE_TASK.getMessage()));
+    }
+
     @ExceptionHandler(UserValidationException.class)
     public ResponseEntity<Map<String, String>> handlerUserApplicationException(UserValidationException e) {
         if(e instanceof CantCreateAnotherUserValidationException){
@@ -66,6 +78,9 @@ public class ControllerAdvisor {
         } else if(e instanceof CantRemoveTaskFromUserValidationException){
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_REMOVE_TASK.getMessage()));
+        } else if(e instanceof TaskAlreadyExistOnUserValidationException){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.ID_USER_ALREADY_EXIST_ON_TASK.getMessage()));
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Collections.singletonMap(MESSAGE, "Error inesperado"));

@@ -25,8 +25,8 @@ public interface IUserHandler {
 
     List<UserResponseDto> getUsersByTaskId(Long idTask);
 
-    void removeTask(String userToRemoveId, Long idTaskToRemove, String updaterId);
-
-    void assignTask(String userToAssignId, Long idTaskToAssign, String updaterId);
+//    void removeTask(String userToRemoveId, Long idTaskToRemove, String updaterId);
+//
+//    void assignTask(String userToAssignId, Long idTaskToAssign, String updaterId);
 
 }

@@ -9,6 +9,7 @@ import com.todoapp.demo.domain.exception.task.*;
 import com.todoapp.demo.domain.spi.ITaskPersistencePort;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -110,6 +111,7 @@ public class TaskUseCase implements ITaskServicePort {
             throw new StatusValidationExceptionDomain(ErrorMessagesDomain.STATUS_INVALID.getMessage());
         }
         taskPersistencePort.updateTaskStatus(taskId, status);
+
 
     }
 

@@ -12,9 +12,9 @@ public interface IUserServicePort {
 
     void deleteUser(String id);
 
-    void removeTask(String idUser, Long idTask);
-
-    void assignTask(String idUser,Long idTask);
+//    void removeTask(String idUser, Long idTask);
+//
+//    void assignTask(String idUser,Long idTask);
 
     List<User> getUsersByName(String name);
 

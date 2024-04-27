@@ -104,27 +104,27 @@ public class UserUseCase implements IUserServicePort {
         return userPersistencePort.getUsersByRole(role);
     }
 
-    @Override
-    public void removeTask(String idUser, Long idTask) {
-        if(!isValidId(idUser)){
-            throw new IdValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
-        }
-        if (!isValidIdTask(idTask) ) {
-            throw  new IdValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
-        }
-        userPersistencePort.getUserById(idUser).getTasks().remove(idTask);
-    }
-
-    @Override
-    public void assignTask(String idUser, Long idTask) {
-        if(!isValidId(idUser)){
-            throw new IdValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
-        }
-        if (!isValidIdTask(idTask) ) {
-            throw  new IdValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
-        }
-        userPersistencePort.getUserById(idUser).getTasks().add(idTask);
-    }
+//    @Override
+//    public void removeTask(String idUser, Long idTask) {
+//        if(!isValidId(idUser)){
+//            throw new IdValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
+//        }
+//        if (!isValidIdTask(idTask) ) {
+//            throw  new IdValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
+//        }
+//        userPersistencePort.getUserById(idUser).getTasks().remove(idTask);
+//    }
+//
+//    @Override
+//    public void assignTask(String idUser, Long idTask) {
+//        if(!isValidId(idUser)){
+//            throw new IdValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
+//        }
+//        if (!isValidIdTask(idTask) ) {
+//            throw  new IdValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
+//        }
+//        userPersistencePort.getUserById(idUser).getTasks().add(idTask);
+//    }
 
     // VALIDACIONES
     public boolean isValidId(String id) {
