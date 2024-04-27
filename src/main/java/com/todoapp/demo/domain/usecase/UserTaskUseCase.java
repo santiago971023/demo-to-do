@@ -1,10 +1,6 @@
 package com.todoapp.demo.domain.usecase;
 
 import com.todoapp.demo.domain.api.IUserTaskServicePort;
-import com.todoapp.demo.domain.model.Task;
-import com.todoapp.demo.domain.model.User;
-import com.todoapp.demo.domain.spi.ITaskPersistencePort;
-import com.todoapp.demo.domain.spi.IUserPersistencePort;
 import com.todoapp.demo.domain.spi.IUserTaskPersistencePort;
 
 import java.util.List;

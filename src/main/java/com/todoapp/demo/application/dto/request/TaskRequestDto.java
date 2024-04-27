@@ -1,20 +1,20 @@
 package com.todoapp.demo.application.dto.request;
 
 import com.todoapp.demo.domain.Status;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class TaskRequestDto {
 
+    @NotBlank(message = "Id field must not be empty")
+    private Long id;
 
     @NotBlank(message = "Title field must not be empty")
     private String title;
@@ -26,6 +26,8 @@ Nota: Como la fecha se inicaliza automaticamente, no es necesario que el usuario
     @NotBlank(message = "StartDate field must not be empty")
     private LocalDate startDate;
 */
+    private LocalDate startDate = LocalDate.now();
+
     @NotBlank(message = "FinishDate field must not be empty")
     private LocalDate finishDate;
 

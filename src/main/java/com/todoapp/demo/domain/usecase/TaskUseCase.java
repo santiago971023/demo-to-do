@@ -3,16 +3,15 @@ package com.todoapp.demo.domain.usecase;
 import com.todoapp.demo.domain.Status;
 import com.todoapp.demo.domain.api.ITaskServicePort;
 import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
-import com.todoapp.demo.domain.exception.task.*;
 import com.todoapp.demo.domain.model.Task;
+import com.todoapp.demo.domain.exception.task.*;
 import com.todoapp.demo.domain.spi.ITaskPersistencePort;
 
-import java.lang.module.FindException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class TaskUseCase implements ITaskServicePort{
+public class TaskUseCase implements ITaskServicePort {
 
     private final ITaskPersistencePort taskPersistencePort;
 

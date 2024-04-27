@@ -3,6 +3,9 @@ package com.todoapp.demo.application.handler;
 import com.todoapp.demo.application.dto.request.TaskRequestDto;
 import com.todoapp.demo.application.dto.response.TaskResponseDto;
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
+import com.todoapp.demo.application.exception.task.CantCreateTaskValidationException;
+import com.todoapp.demo.application.exception.task.CantDeleteTaskValidationException;
+import com.todoapp.demo.application.exception.task.CantUpdateTaskValidationException;
 import com.todoapp.demo.application.mapper.ITaskRequestMapper;
 import com.todoapp.demo.application.mapper.ITaskResponseMapper;
 import com.todoapp.demo.domain.Role;
@@ -36,7 +39,7 @@ public class TaskHandlerImpl implements ITaskHandler{
     @Override
     public void createTask(TaskRequestDto taskRequestDtoToCreate, String idUserCreator) {
         if(!canCreateTask(taskRequestDtoToCreate, idUserCreator)){
-            throw new TaskValidationExceptionDomain(ErrorMessagesApplication.CANT_CREATE_TASK.getMessage());
+            throw new CantCreateTaskValidationException(ErrorMessagesApplication.CANT_CREATE_TASK.getMessage());
         }
         Task taskToCreate = taskRequestMapper.toTask(taskRequestDtoToCreate);
         taskServicePort.createTask(taskToCreate);
@@ -44,10 +47,12 @@ public class TaskHandlerImpl implements ITaskHandler{
 
     @Override
     public void updateTask(TaskRequestDto taskRequestDtoToUpdate, String idUserUpdater) {
+
         if(!canUpdateTask(taskRequestDtoToUpdate, idUserUpdater)){
-            throw new TaskValidationExceptionDomain(ErrorMessagesApplication.CANT_UPDATE_TASK.getMessage());
+            throw new CantUpdateTaskValidationException(ErrorMessagesApplication.CANT_UPDATE_TASK.getMessage());
         }
         Task taskToUpdate = taskRequestMapper.toTask(taskRequestDtoToUpdate);
+        taskToUpdate.setStartDate(taskServicePort.getTaskById(taskRequestDtoToUpdate.getId()).getStartDate());
         taskServicePort.updateTask(taskToUpdate);
 
     }
@@ -55,7 +60,7 @@ public class TaskHandlerImpl implements ITaskHandler{
     @Override
     public void deleteTask(Long idTaskToDelete, String idDeleter) {
         if(!canDeleteTask(idTaskToDelete, idDeleter)){
-            throw new TaskValidationExceptionDomain(ErrorMessagesApplication.CANT_DELETE_TASK.getMessage());
+            throw new CantDeleteTaskValidationException(ErrorMessagesApplication.CANT_DELETE_TASK.getMessage());
         }
         taskServicePort.deleteTask(idTaskToDelete);
     }
@@ -63,7 +68,7 @@ public class TaskHandlerImpl implements ITaskHandler{
     @Override
     public void updateStatusTask(String status, String idUpdater, Long idTaskUpdate) {
         if (!canUpdateStatusTask(status, idUpdater, idTaskUpdate)){
-            throw new TaskValidationExceptionDomain(ErrorMessagesApplication.CANT_UPDATE_STATUS_TASK.getMessage());
+            throw new CantUpdateTaskValidationException(ErrorMessagesApplication.CANT_UPDATE_STATUS_TASK.getMessage());
         }
         taskServicePort.updateTaskStatus(idTaskUpdate, status);
 

@@ -1,7 +1,6 @@
 package com.todoapp.demo.application.handler;
 
 import com.todoapp.demo.application.dto.request.TaskRequestDto;
-import com.todoapp.demo.application.dto.request.UserRequestDto;
 import com.todoapp.demo.application.dto.response.TaskResponseDto;
 
 import java.time.LocalDate;

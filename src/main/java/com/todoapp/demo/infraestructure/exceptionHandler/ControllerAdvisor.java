@@ -1,7 +1,14 @@
 package com.todoapp.demo.infraestructure.exceptionHandler;
 
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
-import com.todoapp.demo.application.exception.UserValidationException;
+import com.todoapp.demo.application.exception.task.CantCreateTaskValidationException;
+import com.todoapp.demo.application.exception.task.CantDeleteTaskValidationException;
+import com.todoapp.demo.application.exception.task.CantUpdateTaskValidationException;
+import com.todoapp.demo.application.exception.task.TaskValidationException;
+import com.todoapp.demo.application.exception.user.CantCreateAnotherUserValidationException;
+import com.todoapp.demo.application.exception.user.CantDeleteAnotherUSerValidationException;
+import com.todoapp.demo.application.exception.user.CantUpdateAnotherUserValidationException;
+import com.todoapp.demo.application.exception.user.UserValidationException;
 import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
 import com.todoapp.demo.domain.exception.task.*;
 import com.todoapp.demo.domain.exception.user.*;
@@ -57,10 +64,37 @@ public class ControllerAdvisor {
     }
 
     @ExceptionHandler(UserValidationException.class)
-    public ResponseEntity<Map<String, String>> userCantCreateAnotherUser(UserValidationException userValidationException) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_CREATE.getMessage()));
+    public ResponseEntity<Map<String, String>> handlerUserApplicationException(UserValidationException e) {
+        if(e instanceof CantCreateAnotherUserValidationException){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_CREATE.getMessage()));
+        } else if(e instanceof CantUpdateAnotherUserValidationException){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_UPDATE.getMessage()));
+        } else if(e instanceof CantDeleteAnotherUSerValidationException){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_DELETE.getMessage()));
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Collections.singletonMap(MESSAGE, "Error inesperado"));
     }
+
+    @ExceptionHandler(TaskValidationException.class)
+    public ResponseEntity<Map<String, String>> handlerTaskApplicationException(TaskValidationException e) {
+        if(e instanceof CantCreateTaskValidationException){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_CREATE_TASK.getMessage()));
+        } else if(e instanceof CantUpdateTaskValidationException){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_UPDATE_TASK.getMessage()));
+        } else if(e instanceof CantDeleteTaskValidationException){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_DELETE_TASK.getMessage()));
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Collections.singletonMap(MESSAGE, "Error inesperado"));
+    }
+
 
 
 
@@ -70,7 +104,7 @@ public class ControllerAdvisor {
     @ExceptionHandler(UserValidationExceptionDomain.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ResponseEntity<Map<String, String>> handlerDomainException(UserValidationExceptionDomain e) {
+    public ResponseEntity<Map<String, String>> handlerUserDomainException(UserValidationExceptionDomain e) {
         if (e instanceof IdValidationExceptionDomain) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Collections.singletonMap(MESSAGE, ErrorMessagesDomain.ID_INVALID.getMessage()));

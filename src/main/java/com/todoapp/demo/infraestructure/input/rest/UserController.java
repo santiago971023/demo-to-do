@@ -3,8 +3,6 @@ package com.todoapp.demo.infraestructure.input.rest;
 
 import com.todoapp.demo.application.dto.request.UserRequestDto;
 import com.todoapp.demo.application.dto.response.UserResponseDto;
-import com.todoapp.demo.application.exception.ErrorMessagesApplication;
-import com.todoapp.demo.application.exception.UserValidationException;
 import com.todoapp.demo.application.handler.ITaskHandler;
 import com.todoapp.demo.application.handler.IUserHandler;
 import io.swagger.annotations.ApiOperation;
@@ -12,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -31,12 +28,7 @@ public class UserController {
            return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    /**
-     * Metodo para actualizar un usuario
-     * @param userRequestDto
-     * @param idUpdater
-     * @return
-     */
+
     @ApiOperation(value = "Actualiza un usuario existente")
     @PutMapping("/update/{idUpdater}")
     public ResponseEntity<Void> updateUser(@RequestBody UserRequestDto userRequestDto, @PathVariable String idUpdater){

@@ -1,8 +1,7 @@
 package com.todoapp.demo.infraestructure.output.jpa.adapter;
 
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
-import com.todoapp.demo.application.exception.TaskValidationException;
-import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
+import com.todoapp.demo.application.exception.task.TaskValidationException;
 import com.todoapp.demo.domain.exception.task.TaskValidationExceptionDomain;
 import com.todoapp.demo.domain.model.Task;
 import com.todoapp.demo.domain.spi.ITaskPersistencePort;
@@ -48,16 +47,18 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
 
     @Override
     public void updateTask(Task task) {
-        try{
-            if(taskRepository.findById(task.getId()).isEmpty()){
+        try {
+            if (taskRepository.findById(task.getId()).isEmpty()) {
                 throw new TaskNotFoundException();
             }
             taskRepository.save(taskEntityMapper.toEntity(task));
-        }catch (TaskNotFoundException e){
+        } catch (TaskNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ExceptionResponse.TASK_NOT_FOUND.getMessage(), e);
-        }catch (TaskValidationException e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_UPDATE_TASK.getMessage(), e);
-        }catch (Exception e){
+        } catch (TaskValidationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }catch(TaskValidationExceptionDomain e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al actualizar tarea", e);
         }
 

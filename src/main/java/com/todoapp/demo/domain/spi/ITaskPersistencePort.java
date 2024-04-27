@@ -1,8 +1,6 @@
 package com.todoapp.demo.domain.spi;
 
-import com.todoapp.demo.application.dto.response.TaskResponseDto;
 import com.todoapp.demo.domain.model.Task;
-import com.todoapp.demo.domain.model.User;
 
 import java.time.LocalDate;
 import java.util.List;

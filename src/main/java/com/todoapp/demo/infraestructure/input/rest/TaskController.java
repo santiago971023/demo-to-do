@@ -6,7 +6,6 @@ import com.todoapp.demo.application.handler.ITaskHandler;
 import com.todoapp.demo.application.handler.IUserHandler;
 import com.todoapp.demo.application.handler.IUserTaskHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

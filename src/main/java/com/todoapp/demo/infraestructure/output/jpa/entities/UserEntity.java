@@ -1,15 +1,12 @@
 package com.todoapp.demo.infraestructure.output.jpa.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.todoapp.demo.domain.Role;
-import com.todoapp.demo.domain.model.Task;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity

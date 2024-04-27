@@ -1,6 +1,7 @@
 package com.todoapp.demo.domain.model;
 
 import com.todoapp.demo.domain.Status;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -36,10 +37,11 @@ public class Task {
         this.idUsers = idUsers;
     }
 
-    public Task(String title, String description,  LocalDate finishDate, Status status, Integer historyPoints) {
+    public Task(String title, String description, LocalDate startDate, LocalDate finishDate, Status status,
+                Integer historyPoints) {
         this.title = title;
         this.description = description;
-        //this.startDate = startDate;
+        this.startDate = startDate;
         this.finishDate = finishDate;
         this.status = status;
         this.historyPoints = historyPoints;

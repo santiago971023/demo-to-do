@@ -3,7 +3,10 @@ package com.todoapp.demo.application.handler;
 import com.todoapp.demo.application.dto.request.UserRequestDto;
 import com.todoapp.demo.application.dto.response.UserResponseDto;
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
-import com.todoapp.demo.application.exception.UserValidationException;
+import com.todoapp.demo.application.exception.user.CantCreateAnotherUserValidationException;
+import com.todoapp.demo.application.exception.user.CantDeleteAnotherUSerValidationException;
+import com.todoapp.demo.application.exception.user.CantUpdateAnotherUserValidationException;
+import com.todoapp.demo.application.exception.user.UserValidationException;
 import com.todoapp.demo.application.mapper.IUserRequestMapper;
 import com.todoapp.demo.application.mapper.IUserResponseMapper;
 import com.todoapp.demo.domain.Role;
@@ -29,7 +32,7 @@ public class UserHandlerImpl implements IUserHandler {
     public void createUser(UserRequestDto userRequestDtoToCreate, String creatorId) {
 
         if (!canCreateUser(creatorId, userRequestDtoToCreate)) {
-            throw new UserValidationException(ErrorMessagesApplication.CANT_CREATE.getMessage());
+            throw new CantCreateAnotherUserValidationException(ErrorMessagesApplication.CANT_CREATE.getMessage());
         }
         User userToCreate = userRequestMapper.toUser(userRequestDtoToCreate);
         userServicePort.createUser(userToCreate);
@@ -40,7 +43,7 @@ public class UserHandlerImpl implements IUserHandler {
     public void updateUser(UserRequestDto userRequestDtoToUpdate, String updaterId) {
 
         if (!canUpdateUser(updaterId, userRequestDtoToUpdate)) {
-            throw new UserValidationException(ErrorMessagesApplication.CANT_UPDATE.getMessage());
+            throw new CantUpdateAnotherUserValidationException(ErrorMessagesApplication.CANT_UPDATE.getMessage());
         }
         User userToUpdate = userRequestMapper.toUser(userRequestDtoToUpdate);
         userServicePort.updateUser(userToUpdate);
@@ -50,7 +53,7 @@ public class UserHandlerImpl implements IUserHandler {
     public void deleteUser(String toDeleteId, String deleterId) {
         // Debemos preguntar si el User que elimina, efectivamente tiene permiso para hacerlo
         if (!canDelete(toDeleteId, deleterId)){
-            throw new UserValidationException(ErrorMessagesApplication.CANT_DELETE.getMessage());
+            throw new CantDeleteAnotherUSerValidationException(ErrorMessagesApplication.CANT_DELETE.getMessage());
         }
         userServicePort.deleteUser(toDeleteId);
     }

@@ -1,12 +1,9 @@
 package com.todoapp.demo.infraestructure.output.jpa.repository;
 
-import com.todoapp.demo.domain.Status;
-import com.todoapp.demo.domain.model.Task;
 import com.todoapp.demo.infraestructure.output.jpa.entities.TaskEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;

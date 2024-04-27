@@ -1,7 +1,6 @@
 package com.todoapp.demo.domain.api;
 
 import com.todoapp.demo.domain.model.Task;
-import com.todoapp.demo.domain.model.User;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -2,8 +2,6 @@ package com.todoapp.demo.application.handler;
 
 import com.todoapp.demo.application.dto.request.UserRequestDto;
 import com.todoapp.demo.application.dto.response.UserResponseDto;
-import com.todoapp.demo.domain.model.User;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 

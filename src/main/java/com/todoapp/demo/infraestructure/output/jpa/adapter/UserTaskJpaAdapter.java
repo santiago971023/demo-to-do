@@ -4,7 +4,6 @@ import com.todoapp.demo.domain.spi.IUserTaskPersistencePort;
 import com.todoapp.demo.infraestructure.output.jpa.mapper.IUserTaskEntityMapper;
 import com.todoapp.demo.infraestructure.output.jpa.repository.IUserTaskRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
