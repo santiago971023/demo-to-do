@@ -47,14 +47,12 @@ public class TaskHandlerImpl implements ITaskHandler{
 
     @Override
     public void updateTask(TaskRequestDto taskRequestDtoToUpdate, String idUserUpdater) {
-
         if(!canUpdateTask(taskRequestDtoToUpdate, idUserUpdater)){
             throw new CantUpdateTaskValidationException(ErrorMessagesApplication.CANT_UPDATE_TASK.getMessage());
         }
         Task taskToUpdate = taskRequestMapper.toTask(taskRequestDtoToUpdate);
         taskToUpdate.setStartDate(taskServicePort.getTaskById(taskRequestDtoToUpdate.getId()).getStartDate());
         taskServicePort.updateTask(taskToUpdate);
-
     }
 
     @Override
@@ -71,7 +69,6 @@ public class TaskHandlerImpl implements ITaskHandler{
             throw new CantUpdateTaskValidationException(ErrorMessagesApplication.CANT_UPDATE_STATUS_TASK.getMessage());
         }
         taskServicePort.updateTaskStatus(idTaskUpdate, status);
-
     }
 
     @Override
@@ -108,21 +105,18 @@ public class TaskHandlerImpl implements ITaskHandler{
     public List<TaskResponseDto> getTaskByStatus(String status) {
 
         List<Task> allTasks = taskServicePort.getAllTasks();
-
         List<Task> tasksWithStatus = new ArrayList<>();
         for (Task task : allTasks) {
-
             if(task.getStatus().toString().equalsIgnoreCase(status)){
                 tasksWithStatus.add(task);
             }
         }
-
         return taskResponseMapper.toTaskResponseList(tasksWithStatus);
-
     }
 
     @Override
     public void removeUserTask(Long idTask, String idUserToDelete) {
+
         if (!existUserOnTask(idUserToDelete, idTask)){
             throw new TaskValidationExceptionDomain(ErrorMessagesApplication.ID_USER_NOTFOUND_IN_TASK.getMessage());
         }
@@ -141,13 +135,10 @@ public class TaskHandlerImpl implements ITaskHandler{
    public List<TaskResponseDto> getTasksByMonth(Integer numberMonth){
         List<Task> allTasks = taskServicePort.getAllTasks();
         List<TaskResponseDto> taskResponseDtoList = taskResponseMapper.toTaskResponseList(allTasks);
-
         return taskResponseDtoList.stream()
-                .filter(task -> task.getStartDate().getMonth().getValue()==numberMonth)
+                .filter(task -> task.getStartDate().getMonth().getValue() == numberMonth)
                 .collect(Collectors.toList());
     }
-
-
 
 
     // VALIDACIONES
@@ -155,19 +146,15 @@ public class TaskHandlerImpl implements ITaskHandler{
     public boolean canCreateTask(TaskRequestDto taskToCreate, String idUser ){
 
         if (taskToCreate != null && userServicePort.getUserById(idUser).getRole() == Role.LEADER){
-
             return true;
         }
-
         return false;
     }
     public boolean canUpdateTask(TaskRequestDto taskToCreate, String idUser ){
 
         if (taskToCreate != null && userServicePort.getUserById(idUser).getRole() == Role.LEADER){
-
             return true;
         }
-
         return false;
     }
 
@@ -184,11 +171,9 @@ public class TaskHandlerImpl implements ITaskHandler{
         if (task != null && status.equals(Status.COMPLETED.name()) && userServicePort.getUserById(idUpdater).getRole() == Role.ADMIN ){
             return true;
         }
-
         if(task != null && (status.equals(Status.IN_PROGRESS.name()) || status.equals(Status.REVISION.name())) && task.getIdUsers().contains(idUpdater)){
             return true;
         }
-
         return  false;
     }
 
@@ -199,9 +184,4 @@ public class TaskHandlerImpl implements ITaskHandler{
         }
         return false;
     }
-
-
-
-
-
 }

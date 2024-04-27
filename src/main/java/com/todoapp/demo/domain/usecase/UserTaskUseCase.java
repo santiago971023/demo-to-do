@@ -11,22 +11,15 @@ public class UserTaskUseCase implements IUserTaskServicePort {
 
     public UserTaskUseCase(IUserTaskPersistencePort userTaskPersistencePort) {
         this.userTaskPersistencePort = userTaskPersistencePort;
-
     }
-
-
 
     @Override
     public void removeUser(Long taskId, String userId) {
-
-
         userTaskPersistencePort.removeUser(taskId, userId);
     }
 
     @Override
     public void assignUser(Long taskId, String userId) {
-
-
         userTaskPersistencePort.assignUser(taskId, userId);
     }
 

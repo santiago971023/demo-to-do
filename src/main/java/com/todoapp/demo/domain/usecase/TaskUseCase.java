@@ -3,6 +3,7 @@ package com.todoapp.demo.domain.usecase;
 import com.todoapp.demo.domain.Status;
 import com.todoapp.demo.domain.api.ITaskServicePort;
 import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
+import com.todoapp.demo.domain.exception.user.IdValidationExceptionDomain;
 import com.todoapp.demo.domain.model.Task;
 import com.todoapp.demo.domain.exception.task.*;
 import com.todoapp.demo.domain.spi.ITaskPersistencePort;
@@ -40,8 +41,6 @@ public class TaskUseCase implements ITaskServicePort {
         if(!isValidStatus(task.getStatus().name())){
             throw new StatusValidationExceptionDomain(ErrorMessagesDomain.STATUS_INVALID.getMessage());
         }
-
-
         taskPersistencePort.createTask(task);
     }
 
@@ -53,15 +52,6 @@ public class TaskUseCase implements ITaskServicePort {
         if(!isValidDescription(task.getDescription())){
             throw new DescriptionValidationExceptionDomain(ErrorMessagesDomain.DESCRIPTION_INVALID.getMessage());
         }
-
-        /*
-          NOTA: Debemos hacer una validacion para que cuando se actualice la tarea, no se pueda tener acceso a esta, por otro lado
-        se debe indicar al usuario que no puede realizar esta accion, por lo que se debe lanzar una excepcion..
-
-                if (!isValidStartDate(task.getStartDate())){
-                    throw new TaskValidationExceptionDomain(ErrorMessagesDomain.STARTDATE_INVALID.getMessage());
-                }
-         */
         if(!isValidFinishDate(task.getFinishDate())){
             throw new FinishDateValidationExceptionDomain(ErrorMessagesDomain.FINISHDATE_INVALID.getMessage());
         }
@@ -114,38 +104,15 @@ public class TaskUseCase implements ITaskServicePort {
     @Override
     public void updateTaskStatus(Long taskId,String status) {
         if (!isValidIdTask(taskId)){
-            throw new TaskValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
-
+            throw new IdValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
         }
         if (!isValidStatus(status)){
-            throw new TaskValidationExceptionDomain(ErrorMessagesDomain.STATUS_INVALID.getMessage());
+            throw new StatusValidationExceptionDomain(ErrorMessagesDomain.STATUS_INVALID.getMessage());
         }
-
         taskPersistencePort.updateTaskStatus(taskId, status);
 
     }
 
-    //        @Override
-    //        public void removeUser(Long taskId, String userId) {
-    //            if (!isValidIdTask(taskId)){
-    //                throw new TaskValidationException(ErrorMessages.IDTASK_INVALID.getMessage());
-    //            }
-    //            if (!isValidIdUser(userId)){
-    //                throw new TaskValidationException(ErrorMessages.ID_INVALID.getMessage());
-    //            }
-    //            taskPersistencePort.getTaskById(taskId).getIdUsers().remove(userId);
-    //        }
-    //
-    //        @Override
-    //        public void assignUser(Long taskId, String userId) {
-    //            if (!isValidIdTask(taskId)){
-    //                throw new TaskValidationException(ErrorMessages.IDTASK_INVALID.getMessage());
-    //            }
-    //            if (!isValidIdUser(userId)){
-    //                throw new TaskValidationException(ErrorMessages.ID_INVALID.getMessage());
-    //            }
-    //            taskPersistencePort.getTaskById(taskId).getIdUsers().add(userId);
-    //        }
 
     //VALIDACIONES
     public boolean isValidIdTask(Long idTask){
@@ -167,47 +134,29 @@ public class TaskUseCase implements ITaskServicePort {
             return false;
         }
         String regex = ".{15,}";
-        // String regex = "^[A-Za-z]+$";
-
         return description.matches(regex);
-        //return true;
     }
 
-    public boolean isValidStartDate(LocalDate startDate){
-        if (startDate == null || startDate.toString().isEmpty()){
+    public boolean isValidFinishDate(LocalDate finishDate) {
+
+        if (finishDate == null || finishDate.toString().isEmpty()) {
+            return false;
+        }
+        if (finishDate.isBefore(LocalDate.now())) {
             return false;
         }
         return true;
     }
-
-    public boolean isValidFinishDate(LocalDate finishDate){
-
-        if (finishDate == null || finishDate.toString().isEmpty()){
-            return false;
-        }
-
-        if(finishDate.isBefore(LocalDate.now())){
-            return false;
-        }
-
-        return true;
-    }
-    //String fechaString = "2024-03-05";
-    //LocalDate fecha = LocalDate.parse(fechaString);
 
     public boolean isValidStatus(String status) {
-
         try {
             Status[] validStatus = Status.values();
-
             for (Status valStatus : validStatus) {
                 if (valStatus.name().equalsIgnoreCase(status)) {
                     return true; //El valor coincide con un status válido
                 }
             }
-
             return false;
-
         } catch (IllegalArgumentException e) {
             //Capturar excepción si el valor no coincide con ningún enum válido
             return false;
@@ -219,11 +168,8 @@ public class TaskUseCase implements ITaskServicePort {
         if (historyPoints == null){
             return false;
         }
-        // Verificar si el número se ajusta a la expresión regular (solo caracteres del 1 al 9 sin caracteres especiales)
         String numberString = String.valueOf(historyPoints);
-        String regex = "[0-9]+"; // La expresión regular solo permite caracteres del 1 al 9 sin caracteres especiales
-        //Se corrige la expresión regular para que permita números desde 0 hasta 9, estaba generando problemas ya que
-        // si engresaba el numero 100 no lo tomaba como valido
+        String regex = "[0-9]+"; // La expresión regular solo permite caracteres del 0 al 9 sin caracteres especiales
         return Pattern.matches(regex, numberString);
     }
 

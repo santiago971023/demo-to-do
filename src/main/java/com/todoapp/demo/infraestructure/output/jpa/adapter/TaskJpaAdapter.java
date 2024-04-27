@@ -5,9 +5,7 @@ import com.todoapp.demo.application.exception.task.TaskValidationException;
 import com.todoapp.demo.domain.exception.task.TaskValidationExceptionDomain;
 import com.todoapp.demo.domain.model.Task;
 import com.todoapp.demo.domain.spi.ITaskPersistencePort;
-import com.todoapp.demo.infraestructure.exception.NoDataFoundException;
-import com.todoapp.demo.infraestructure.exception.TaskAlreadyExistsException;
-import com.todoapp.demo.infraestructure.exception.TaskNotFoundException;
+import com.todoapp.demo.infraestructure.exception.*;
 import com.todoapp.demo.infraestructure.exceptionHandler.ExceptionResponse;
 import com.todoapp.demo.infraestructure.output.jpa.entities.TaskEntity;
 import com.todoapp.demo.infraestructure.output.jpa.mapper.ITaskEntityMapper;
@@ -26,8 +24,6 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
     private final ITaskRepository taskRepository;
     private final ITaskEntityMapper taskEntityMapper;
 
-
-
     @Override
     public void createTask(Task task) {
         try {
@@ -35,7 +31,6 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
                 throw new TaskAlreadyExistsException();
             }
             taskRepository.save(taskEntityMapper.toEntity(task));
-
         } catch (TaskAlreadyExistsException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, ExceptionResponse.TASK_ALREADY_EXISTS.getMessage(), e);
         }catch (TaskValidationException e) {
@@ -132,12 +127,26 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
 
     @Override
     public void removeUser(Long taskId, String userId) {
+        /*Task task = taskEntityMapper.toTask(taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new));
+
+        if (!task.getIdUsers().contains(userId)){
+            throw new UserNotFoundException();
+        }
+        taskRepository.re
+*/
 
     }
 
     @Override
     @Transactional
     public void assignUser(Long taskId, String userId) {
+
+      /*  Task task = taskEntityMapper.toTask(taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new));
+
+            if (task.getIdUsers().contains(userId)){
+                throw new UserAlreadyExistsException();
+            } */
+
 
        taskRepository.assignTaskToUser(userId, taskId);
     }

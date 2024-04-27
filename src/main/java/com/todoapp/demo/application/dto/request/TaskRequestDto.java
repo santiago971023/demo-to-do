@@ -21,11 +21,7 @@ public class TaskRequestDto {
 
     @NotBlank(message = "Description field must not be empty")
     private String description;
-/*
-Nota: Como la fecha se inicaliza automaticamente, no es necesario que el usuario la ingrese, por lo que se comenta
-    @NotBlank(message = "StartDate field must not be empty")
-    private LocalDate startDate;
-*/
+
     private LocalDate startDate = LocalDate.now();
 
     @NotBlank(message = "FinishDate field must not be empty")

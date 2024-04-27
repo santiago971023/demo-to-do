@@ -7,9 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserTaskRepository extends JpaRepository<UserTaskEntity, Long> {
 
+    @Query("SELECT ut FROM UserTaskEntity ut WHERE ut.taskId = :taskId AND ut.userId = :userId")
+    Optional<UserTaskEntity> findByTaskIdAndUserId(Long taskId, String userId);
     @Query("SELECT ut.taskId FROM UserTaskEntity ut WHERE ut.userId = :userId")
     List<Long> findTaskIdsByUserId(@Param("userId") String userId);
 

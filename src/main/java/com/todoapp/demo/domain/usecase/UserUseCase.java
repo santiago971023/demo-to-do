@@ -107,28 +107,23 @@ public class UserUseCase implements IUserServicePort {
     @Override
     public void removeTask(String idUser, Long idTask) {
         if(!isValidId(idUser)){
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
+            throw new IdValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
         }
         if (!isValidIdTask(idTask) ) {
-            throw  new UserValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
+            throw  new IdValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
         }
-
         userPersistencePort.getUserById(idUser).getTasks().remove(idTask);
-
-
     }
 
     @Override
     public void assignTask(String idUser, Long idTask) {
         if(!isValidId(idUser)){
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
+            throw new IdValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
         }
         if (!isValidIdTask(idTask) ) {
-            throw  new UserValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
+            throw  new IdValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
         }
-
         userPersistencePort.getUserById(idUser).getTasks().add(idTask);
-
     }
 
     // VALIDACIONES
@@ -151,18 +146,15 @@ public class UserUseCase implements IUserServicePort {
     }
 
     public boolean isValidRole(String role) {
-
         try {
             //Obtengo los roles del enum Role
             Role[] validRoles = Role.values();
-
             //Verifico si el valor de 'role' coincide con alguno de los valores de mi Enum
             for (Role validRole : validRoles) {
                 if (validRole.name().equalsIgnoreCase(role)) {
                     return true; //El valor coincide con un rol válido
                 }
             }
-
             // Si no se encontró coincidencia con ningún rol válido
             return false;
         } catch (IllegalArgumentException e) {
@@ -198,7 +190,6 @@ public class UserUseCase implements IUserServicePort {
             return false;
         }
         return true;
-
     }
 
     public boolean isValidIdTask(Long idTask) {

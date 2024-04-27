@@ -1,9 +1,14 @@
 package com.todoapp.demo.infraestructure.output.jpa.adapter;
 
+import com.todoapp.demo.domain.model.UserTask;
 import com.todoapp.demo.domain.spi.IUserTaskPersistencePort;
+import com.todoapp.demo.infraestructure.exception.UserAlreadyExistsException;
+import com.todoapp.demo.infraestructure.exception.UserNotFoundException;
+import com.todoapp.demo.infraestructure.output.jpa.entities.UserTaskEntity;
 import com.todoapp.demo.infraestructure.output.jpa.mapper.IUserTaskEntityMapper;
 import com.todoapp.demo.infraestructure.output.jpa.repository.IUserTaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -15,11 +20,17 @@ public class UserTaskJpaAdapter implements IUserTaskPersistencePort {
 
     @Override
     public void removeUser(Long taskId, String userId) {
+        if (userTaskRepository.findByTaskIdAndUserId(taskId, userId).isEmpty()){
+            throw new UserNotFoundException();
+        }
         userTaskRepository.removeTaskFromUser(userId, taskId);
     }
 
     @Override
     public void assignUser(Long taskId, String userId) {
+        if (userTaskRepository.findByTaskIdAndUserId(taskId, userId).isPresent()){
+            throw new UserAlreadyExistsException();
+        }
         userTaskRepository.assignTaskToUser(userId, taskId);
     }
 

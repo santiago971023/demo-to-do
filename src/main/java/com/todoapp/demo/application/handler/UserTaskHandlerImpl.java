@@ -13,7 +13,6 @@ import java.util.List;
 @Transactional
 public class UserTaskHandlerImpl implements IUserTaskHandler{
 
-    private final IUserTaskMapper userTaskMapper;
     private final IUserTaskServicePort userTaskServicePort;
     @Override
     public void assignUser(String userId, Long taskId) {
@@ -23,7 +22,6 @@ public class UserTaskHandlerImpl implements IUserTaskHandler{
     @Override
     public void removeUser(String userId, Long taskId) {
         userTaskServicePort.removeUser(taskId, userId);
-
     }
 
     @Override
@@ -33,7 +31,6 @@ public class UserTaskHandlerImpl implements IUserTaskHandler{
 
     @Override
     public List<Long> getTaskIdsByUser(String idUser) {
-        List<Long> taskIdsList = userTaskServicePort.getTasksByUserId(idUser);
-        return taskIdsList;
+        return userTaskServicePort.getTasksByUserId(idUser);
     }
 }

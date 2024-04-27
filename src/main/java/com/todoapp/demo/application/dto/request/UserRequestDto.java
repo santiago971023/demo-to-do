@@ -28,14 +28,4 @@ public class UserRequestDto {
     @NotBlank(message = "Role field must not be empty")
     private Role role;
 
-//    @ApiModelProperty(notes = "Lista de tareas del usuario", example = "[]")
-//      private List<Long> tasks;
-
-
-
-
-
-
-
-
 }

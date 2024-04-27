@@ -1,14 +1,8 @@
 package com.todoapp.demo.infraestructure.exceptionHandler;
 
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
-import com.todoapp.demo.application.exception.task.CantCreateTaskValidationException;
-import com.todoapp.demo.application.exception.task.CantDeleteTaskValidationException;
-import com.todoapp.demo.application.exception.task.CantUpdateTaskValidationException;
-import com.todoapp.demo.application.exception.task.TaskValidationException;
-import com.todoapp.demo.application.exception.user.CantCreateAnotherUserValidationException;
-import com.todoapp.demo.application.exception.user.CantDeleteAnotherUSerValidationException;
-import com.todoapp.demo.application.exception.user.CantUpdateAnotherUserValidationException;
-import com.todoapp.demo.application.exception.user.UserValidationException;
+import com.todoapp.demo.application.exception.task.*;
+import com.todoapp.demo.application.exception.user.*;
 import com.todoapp.demo.domain.exception.ErrorMessagesDomain;
 import com.todoapp.demo.domain.exception.task.*;
 import com.todoapp.demo.domain.exception.user.*;
@@ -33,34 +27,26 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleUserAlreadyExistsException(UserAlreadyExistsException userAlreadyExistsException) {
-
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(MESSAGE, ExceptionResponse.USER_ALREADY_EXISTS.getMessage()));
-
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleNotDataFoundException(UserNotFoundException userNotFoundException) {
-
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(MESSAGE, ExceptionResponse.USER_NOT_FOUND.getMessage()));
-
     }
 
     @ExceptionHandler(TaskAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleTaskAlreadyExistsException(TaskAlreadyExistsException taskAlreadyExist) {
-
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(MESSAGE, ExceptionResponse.TASK_ALREADY_EXISTS.getMessage()));
-
     }
 
     @ExceptionHandler(TaskNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleTaskNotDataFoundException(TaskNotFoundException taskNotFoundException) {
-
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(MESSAGE, ExceptionResponse.TASK_NOT_FOUND.getMessage()));
-
     }
 
     @ExceptionHandler(UserValidationException.class)
@@ -74,6 +60,12 @@ public class ControllerAdvisor {
         } else if(e instanceof CantDeleteAnotherUSerValidationException){
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_DELETE.getMessage()));
+        } else if(e instanceof CantAssignTaskToUserValidationException){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_ASSIGN_TASK.getMessage()));
+        } else if(e instanceof CantRemoveTaskFromUserValidationException){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_REMOVE_TASK.getMessage()));
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Collections.singletonMap(MESSAGE, "Error inesperado"));
@@ -81,23 +73,22 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(TaskValidationException.class)
     public ResponseEntity<Map<String, String>> handlerTaskApplicationException(TaskValidationException e) {
-        if(e instanceof CantCreateTaskValidationException){
+        if (e instanceof CantCreateTaskValidationException) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_CREATE_TASK.getMessage()));
-        } else if(e instanceof CantUpdateTaskValidationException){
+        } else if (e instanceof CantUpdateTaskValidationException) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_UPDATE_TASK.getMessage()));
-        } else if(e instanceof CantDeleteTaskValidationException){
+        } else if (e instanceof CantDeleteTaskValidationException) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_DELETE_TASK.getMessage()));
+        }else if(e instanceof CantUpdateStatusTaskValidationException){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_UPDATE_STATUS_TASK.getMessage()));
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Collections.singletonMap(MESSAGE, "Error inesperado"));
     }
-
-
-
-
 
 
 

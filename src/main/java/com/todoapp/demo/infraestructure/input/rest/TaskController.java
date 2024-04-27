@@ -20,6 +20,7 @@ public class TaskController {
 
     private final ITaskHandler taskHandler;
     private final IUserHandler userHandler;
+    //IUserHandler contiene los metodos que validan si el usuario tiene permisos para asignar o remover un usuario de una tarea
     private final IUserTaskHandler userTaskHandler;
 
     @PostMapping("/save/{idCreator}")
@@ -81,13 +82,16 @@ public class TaskController {
     @PutMapping("/remove-user/{idUserToDelete}/{idTaskToDelete}/{idUserDeleter}")
     public ResponseEntity<Void> removeUserFromTask(@PathVariable String idUserToDelete, @PathVariable String idUserDeleter, @PathVariable Long idTaskToDelete){
         userTaskHandler.removeUser(idUserToDelete, idTaskToDelete);
+        //No se esta validando si el id del asignador tiene permisos para remover al usuario, el metodo
+        //removeUser de la clase UserTaskHandler no tiene implementado la validacion de permisos
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-
     }
 
     @PutMapping("/assign-user/{idUserToAssign}/{idTaskToAssign}/{idUserAssigner}")
     public ResponseEntity<Void> assignUserToTask(@PathVariable String idUserToAssign, @PathVariable String idUserAssigner, @PathVariable Long idTaskToAssign) {
         userTaskHandler.assignUser(idUserToAssign, idTaskToAssign);
+        //No se esta validando si el id del asignador tiene permisos para asignar al usuario
+        //el metodo assignUser de la clase UserTaskHandler no tiene implementado la validacion de permisos
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
@@ -95,11 +99,4 @@ public class TaskController {
     public ResponseEntity<List<TaskResponseDto>> getTasksByMonth(@PathVariable Integer numberMonth){
         return ResponseEntity.ok(taskHandler.getTasksByMonth(numberMonth));
     }
-
-
-
-
-
-
-
 }

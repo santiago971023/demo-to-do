@@ -3,10 +3,7 @@ package com.todoapp.demo.application.handler;
 import com.todoapp.demo.application.dto.request.UserRequestDto;
 import com.todoapp.demo.application.dto.response.UserResponseDto;
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
-import com.todoapp.demo.application.exception.user.CantCreateAnotherUserValidationException;
-import com.todoapp.demo.application.exception.user.CantDeleteAnotherUSerValidationException;
-import com.todoapp.demo.application.exception.user.CantUpdateAnotherUserValidationException;
-import com.todoapp.demo.application.exception.user.UserValidationException;
+import com.todoapp.demo.application.exception.user.*;
 import com.todoapp.demo.application.mapper.IUserRequestMapper;
 import com.todoapp.demo.application.mapper.IUserResponseMapper;
 import com.todoapp.demo.domain.Role;
@@ -84,7 +81,6 @@ public class UserHandlerImpl implements IUserHandler {
         List<User> allUsers = userServicePort.getAllUsers();
         List<User> usersWithRole = new ArrayList<>();
         for (User user : allUsers) {
-
             if(user.getRole().toString().equalsIgnoreCase(role)){
                 usersWithRole.add(user);
             }
@@ -102,14 +98,14 @@ public class UserHandlerImpl implements IUserHandler {
         User updater = userServicePort.getUserById(updaterId);
         User userToUpdate = userServicePort.getUserById(userToRemoveId);
         if (!canUpdateTasksToUser(updaterId, userToRemoveId)) {
-            throw new UserValidationException(ErrorMessagesApplication.CANT_REMOVE_TASK.getMessage());
+            throw new CantRemoveTaskFromUserValidationException(ErrorMessagesApplication.CANT_REMOVE_TASK.getMessage());
         }
         boolean isDeleted = false;
         if(userToUpdate.getTasks() != null){
             isDeleted = userToUpdate.getTasks().removeIf( id -> id.equals(idTaskToRemove));
         }
         if(!isDeleted){
-            throw new UserValidationException(ErrorMessagesApplication.CANT_REMOVE_TASK.getMessage());
+            throw new UserValidationException(ErrorMessagesApplication.TASK_NOT_FOUND_IN_USER.getMessage());
         }else{
             userServicePort.updateUser(userToUpdate);
         }
@@ -120,11 +116,10 @@ public class UserHandlerImpl implements IUserHandler {
     public void assignTask(String userToAssignId, Long idTaskToAssign, String updaterId) {
 
         User userToAssign = userServicePort.getUserById(userToAssignId);
-
         User updater = userServicePort.getUserById(updaterId);
 
         if (!canUpdateTasksToUser(updaterId, userToAssignId)) {
-            throw new UserValidationException(ErrorMessagesApplication.CANT_ASSIGN_TASK.getMessage());
+            throw new CantAssignTaskToUserValidationException(ErrorMessagesApplication.CANT_ASSIGN_TASK.getMessage());
         }
         if (userToAssign.getTasks().contains(idTaskToAssign)){
             throw new UserValidationException(ErrorMessagesApplication.TASK_ALREADY.getMessage());
@@ -132,8 +127,6 @@ public class UserHandlerImpl implements IUserHandler {
             userToAssign.getTasks().add(idTaskToAssign);
             userServicePort.updateUser(userToAssign);
         }
-
-
     }
 
     // VALIDACIONES
@@ -176,8 +169,6 @@ public class UserHandlerImpl implements IUserHandler {
                 return true; // Quien actualiza es admin y tiene permisos para actualizar Colaborador y Lideres
             }
         }
-
-
         return false; // El usuario actualizador no tiene permisos de Admin
     }
 
@@ -191,10 +182,6 @@ public class UserHandlerImpl implements IUserHandler {
                 return true;
             }
         }
-
         return false;
-
     }
-
-
 }
