@@ -48,17 +48,20 @@ public class UserJpaAdapter implements IUserPersistencePort {
     @Override
     public void updateUser(User userToUpdate) {
         try {
-            if (userRepository.findById(userToUpdate.getId()).isEmpty()) {
+            //Se actualiza el la validacion ya que la consulta debe validar el null,
+            //lo cual genera un error al momento de actualizar
+            if (userRepository.findById(userToUpdate.getId()).isPresent()) {
+                userRepository.save(userEntityMapper.toEntity(userToUpdate));
+            } else {
                 throw new UserNotFoundException();
             }
-            userRepository.save(userEntityMapper.toEntity(userToUpdate));
-        } catch (UserNotFoundException e) {
+        }
+        catch (UserNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ExceptionResponse.USER_NOT_FOUND.getMessage(), e);
-
-
         } catch (UserValidationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_UPDATE.getMessage(), e);
         }catch (Exception e){
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al actualizar usuario", e);
         }
     }
@@ -69,12 +72,10 @@ public class UserJpaAdapter implements IUserPersistencePort {
                 throw new UserNotFoundException();
             }
             userRepository.deleteById(id);
-
         }catch(UserNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ExceptionResponse.USER_NOT_FOUND.getMessage(), e);
         }catch (UserValidationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_DELETE.getMessage(), e);
-
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al eliminar usuario", e);
         }
@@ -112,8 +113,6 @@ public class UserJpaAdapter implements IUserPersistencePort {
         //  asignar dicha lista a nuestro user consultado en bbdd
         user.setTasks(taskIdsOfUser);
         return user;
-
-        // return userEntityMapper.toUser(userRepository.findById(id).orElseThrow(UserNotFoundException::new));
     }
 
     @Override

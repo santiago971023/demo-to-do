@@ -95,41 +95,7 @@ public class UserHandlerImpl implements IUserHandler {
         return userResponseMapper.toUserResponseList(userServicePort.getUsersByTaskId(idTask));
     }
 
-//    @Override
-//    public void removeTask(String userToRemoveId, Long idTaskToRemove, String updaterId) {
-//        User updater = userServicePort.getUserById(updaterId);
-//        User userToUpdate = userServicePort.getUserById(userToRemoveId);
-//        if (!canUpdateTasksToUser(updaterId, userToRemoveId)) {
-//            throw new CantRemoveTaskFromUserValidationException(ErrorMessagesApplication.CANT_REMOVE_TASK.getMessage());
-//        }
-//        boolean isDeleted = false;
-//        if(userToUpdate.getTasks() != null){
-//            isDeleted = userToUpdate.getTasks().removeIf( id -> id.equals(idTaskToRemove));
-//        }
-//        if(!isDeleted){
-//            throw new UserValidationException(ErrorMessagesApplication.TASK_NOT_FOUND_IN_USER.getMessage());
-//        }else{
-//            userServicePort.updateUser(userToUpdate);
-//        }
-//    }
-//
-//
-//    @Override
-//    public void assignTask(String userToAssignId, Long idTaskToAssign, String updaterId) {
-//
-//        User userToAssign = userServicePort.getUserById(userToAssignId);
-//        User updater = userServicePort.getUserById(updaterId);
-//
-//        if (!canUpdateTasksToUser(updaterId, userToAssignId)) {
-//            throw new CantAssignTaskToUserValidationException(ErrorMessagesApplication.CANT_ASSIGN_TASK.getMessage());
-//        }
-//        if (userToAssign.getTasks().contains(idTaskToAssign)){
-//            throw new UserValidationException(ErrorMessagesApplication.TASK_ALREADY.getMessage());
-//        }else {
-//            userToAssign.getTasks().add(idTaskToAssign);
-//            userServicePort.updateUser(userToAssign);
-//        }
-  //  }
+
 
     // VALIDACIONES
 

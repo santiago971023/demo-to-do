@@ -34,7 +34,6 @@ public class UserController {
     public ResponseEntity<Void> updateUser(@RequestBody UserRequestDto userRequestDto, @PathVariable String idUpdater){
         userHandler.updateUser(userRequestDto, idUpdater);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-
     }
 
     @GetMapping("/all")
@@ -73,27 +72,5 @@ public class UserController {
     public ResponseEntity<Void> deleteById(@PathVariable String idUserToDelete, @PathVariable String idUserDeleter ){
         userHandler.deleteUser(idUserToDelete, idUserDeleter);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-
-
     }
-
-//    @PutMapping("/remove-task/{idUserToDelete}/{idTaskToDelete}/{idUserDeleter}")
-//    public ResponseEntity<Void> removeTaskFromUser(@PathVariable String idUserToDelete, @PathVariable String idUserDeleter, @PathVariable Long idTaskToDelete){
-//        userHandler.removeTask(idUserToDelete, idTaskToDelete, idUserDeleter);
-//        taskHandler.removeUserTask(idTaskToDelete, idUserToDelete);
-//
-//        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-//
-//    }
-//
-//    @PutMapping("/assign-task/{idUserToAssign}/{idTaskToAssign}/{idUserAssigner}")
-//    public ResponseEntity<Void> assignTaskToUser(@PathVariable String idUserToAssign, @PathVariable String idUserAssigner, @PathVariable Long idTaskToAssign){
-//        userHandler.assignTask(idUserToAssign, idTaskToAssign, idUserAssigner);
-//        taskHandler.assingUserTask(idTaskToAssign,idUserToAssign);
-//
-//        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-//    }
-
-
-
 }

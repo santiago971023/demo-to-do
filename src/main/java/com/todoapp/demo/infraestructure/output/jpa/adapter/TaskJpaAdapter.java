@@ -70,21 +70,16 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ExceptionResponse.TASK_NOT_FOUND.getMessage(), e);
         } catch (TaskValidationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessagesApplication.CANT_DELETE_TASK.getMessage(), e);
-
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al eliminar tarea", e);
-
         }
     }
 
     @Override
     public Task getTaskById(Long taskId) {
         Task task = taskEntityMapper.toTask(taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new));
-
         List<String> userIdsOfTask = taskRepository.getUserIdsForTask(taskId);
-
         task.setIdUsers(userIdsOfTask);
-
         return task;
     }
 
@@ -92,7 +87,6 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
     public List<Task> getAllTasks() {
 
         List<TaskEntity> taskList = taskRepository.findAll();
-
         if (taskList.isEmpty()){
             throw new NoDataFoundException();
         }
@@ -122,34 +116,8 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
     @Override
     public void updateTaskStatus(Long taskId, String status) {
 
-
     }
 
-    @Override
-    public void removeUser(Long taskId, String userId) {
-        /*Task task = taskEntityMapper.toTask(taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new));
-
-        if (!task.getIdUsers().contains(userId)){
-            throw new UserNotFoundException();
-        }
-        taskRepository.re
-*/
-
-    }
-
-    @Override
-    @Transactional
-    public void assignUser(Long taskId, String userId) {
-
-      /*  Task task = taskEntityMapper.toTask(taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new));
-
-            if (task.getIdUsers().contains(userId)){
-                throw new UserAlreadyExistsException();
-            } */
-
-
-       taskRepository.assignTaskToUser(userId, taskId);
-    }
     @Override
     public List<Task> getTasksByMonth(Integer numberMonth){
         return taskEntityMapper.toTaskList(taskRepository.findTasksByMonth(numberMonth).orElseThrow(NoDataFoundException::new));

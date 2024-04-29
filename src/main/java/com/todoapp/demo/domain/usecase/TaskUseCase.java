@@ -111,8 +111,6 @@ public class TaskUseCase implements ITaskServicePort {
             throw new StatusValidationExceptionDomain(ErrorMessagesDomain.STATUS_INVALID.getMessage());
         }
         taskPersistencePort.updateTaskStatus(taskId, status);
-
-
     }
 
 

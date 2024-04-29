@@ -22,7 +22,7 @@ public class TaskRequestDto {
     @NotBlank(message = "Description field must not be empty")
     private String description;
 
-    private LocalDate startDate = LocalDate.now();
+    //private LocalDate startDate = LocalDate.now();
 
     @NotBlank(message = "FinishDate field must not be empty")
     private LocalDate finishDate;

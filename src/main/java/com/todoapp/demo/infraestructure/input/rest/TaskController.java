@@ -3,7 +3,6 @@ package com.todoapp.demo.infraestructure.input.rest;
 import com.todoapp.demo.application.dto.request.TaskRequestDto;
 import com.todoapp.demo.application.dto.response.TaskResponseDto;
 import com.todoapp.demo.application.handler.ITaskHandler;
-import com.todoapp.demo.application.handler.IUserHandler;
 import com.todoapp.demo.application.handler.IUserTaskHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,8 +18,6 @@ import java.util.List;
 public class TaskController {
 
     private final ITaskHandler taskHandler;
-    private final IUserHandler userHandler;
-    //IUserHandler contiene los metodos que validan si el usuario tiene permisos para asignar o remover un usuario de una tarea
     private final IUserTaskHandler userTaskHandler;
 
     @PostMapping("/save/{idCreator}")
@@ -33,14 +30,12 @@ public class TaskController {
     public ResponseEntity<Void> updateTask(@RequestBody TaskRequestDto taskRequestDto, @PathVariable String idUpdater){
         taskHandler.updateTask(taskRequestDto, idUpdater);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        
     }
 
     @DeleteMapping("/delete/{idTaskToDelete}/{idDeleter}")
     public ResponseEntity<Void> deleteTaskById(@PathVariable Long idTaskToDelete, @PathVariable String idDeleter){
         taskHandler.deleteTask(idTaskToDelete, idDeleter);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        
     }
 
     @GetMapping("/all")
@@ -82,16 +77,12 @@ public class TaskController {
     @PutMapping("/remove-user/{idUserToDelete}/{idTaskToDelete}/{idUserDeleter}")
     public ResponseEntity<Void> removeUserFromTask(@PathVariable String idUserToDelete, @PathVariable String idUserDeleter, @PathVariable Long idTaskToDelete){
         userTaskHandler.removeTask(idUserToDelete,idTaskToDelete, idUserDeleter);
-        //No se esta validando si el id del asignador tiene permisos para remover al usuario, el metodo
-        //removeUser de la clase UserTaskHandler no tiene implementado la validacion de permisos
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @PutMapping("/assign-user/{idUserToAssign}/{idTaskToAssign}/{idUserAssigner}")
     public ResponseEntity<Void> assignUserToTask(@PathVariable String idUserToAssign, @PathVariable String idUserAssigner, @PathVariable Long idTaskToAssign) {
         userTaskHandler.assignTask(idUserToAssign,idTaskToAssign,idUserAssigner);
-        //No se esta validando si el id del asignador tiene permisos para asignar al usuario
-        //el metodo assignUser de la clase UserTaskHandler no tiene implementado la validacion de permisos
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 

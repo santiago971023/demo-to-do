@@ -22,15 +22,6 @@ public class UserTaskHandlerImpl implements IUserTaskHandler{
 
     private final IUserTaskServicePort userTaskServicePort;
     private final IUserServicePort userServicePort;
-//    @Override
-//    public void assignUser(String userId, Long taskId) {
-//        userTaskServicePort.assignUser(taskId, userId);
-//    }
-//
-//    @Override
-//    public void removeUser(String userId, Long taskId) {
-//        userTaskServicePort.removeUser(taskId, userId);
-//    }
 
     @Override
     public void removeTask(String userToRemoveId, Long idTaskToRemove, String updaterId) {
@@ -90,8 +81,4 @@ public class UserTaskHandlerImpl implements IUserTaskHandler{
         }
         return false;
     }
-
-
-
-
 }

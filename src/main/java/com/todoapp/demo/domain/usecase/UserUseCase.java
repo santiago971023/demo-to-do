@@ -22,7 +22,6 @@ public class UserUseCase implements IUserServicePort {
     @Override
     public void createUser(User newUser) {
 
-
         if (!isValidId(newUser.getId())) {
             throw new IdValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
         }
@@ -64,9 +63,9 @@ public class UserUseCase implements IUserServicePort {
         if (!isValidRole(userToUpdate.getRole().toString())) {
             throw new UserValidationExceptionDomain(ErrorMessagesDomain.ROLE_INVALID.getMessage());
         }
+        /*NOTA: Estas lineas de codigo no tenian ninguna funcionalidad, por lo que se eliminaron
         User updatedUser = new User(userToUpdate.getName(), userToUpdate.getLastname(), userToUpdate.getEmail(),
-                userToUpdate.getPassword(), userToUpdate.getRole(), userToUpdate.getTasks());
-
+                userToUpdate.getPassword(), userToUpdate.getRole(), userToUpdate.getTasks());*/
         userPersistencePort.updateUser(userToUpdate);
     }
 
@@ -104,27 +103,7 @@ public class UserUseCase implements IUserServicePort {
         return userPersistencePort.getUsersByRole(role);
     }
 
-//    @Override
-//    public void removeTask(String idUser, Long idTask) {
-//        if(!isValidId(idUser)){
-//            throw new IdValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
-//        }
-//        if (!isValidIdTask(idTask) ) {
-//            throw  new IdValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
-//        }
-//        userPersistencePort.getUserById(idUser).getTasks().remove(idTask);
-//    }
-//
-//    @Override
-//    public void assignTask(String idUser, Long idTask) {
-//        if(!isValidId(idUser)){
-//            throw new IdValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
-//        }
-//        if (!isValidIdTask(idTask) ) {
-//            throw  new IdValidationExceptionDomain(ErrorMessagesDomain.IDTASK_INVALID.getMessage());
-//        }
-//        userPersistencePort.getUserById(idUser).getTasks().add(idTask);
-//    }
+
 
     // VALIDACIONES
     public boolean isValidId(String id) {
@@ -141,7 +120,7 @@ public class UserUseCase implements IUserServicePort {
             return false;
         }
         // Usamos una expresión regular para verificar que el nombre contenga solo letras
-        String regex = "^[A-Za-z]+$";
+        String regex = "^[A-Za-z ]+$";
         return name.matches(regex);
     }
 
@@ -198,9 +177,6 @@ public class UserUseCase implements IUserServicePort {
         }
         return true;
     }
-
-
-
 }
 
 
