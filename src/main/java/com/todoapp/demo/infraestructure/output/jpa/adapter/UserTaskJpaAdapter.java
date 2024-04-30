@@ -2,6 +2,7 @@ package com.todoapp.demo.infraestructure.output.jpa.adapter;
 
 import com.todoapp.demo.domain.model.UserTask;
 import com.todoapp.demo.domain.spi.IUserTaskPersistencePort;
+import com.todoapp.demo.infraestructure.exception.TaskNotFoundException;
 import com.todoapp.demo.infraestructure.exception.UserAlreadyExistsException;
 import com.todoapp.demo.infraestructure.exception.UserNotFoundException;
 import com.todoapp.demo.infraestructure.output.jpa.entities.UserTaskEntity;
@@ -28,10 +29,11 @@ public class UserTaskJpaAdapter implements IUserTaskPersistencePort {
 
     @Override
     public void assignUser(Long taskId, String userId) {
-        if (userTaskRepository.findByTaskIdAndUserId(taskId, userId).isPresent()){
+     if (userTaskRepository.findByTaskIdAndUserId(taskId, userId).isPresent()){
             throw new UserAlreadyExistsException();
         }
         userTaskRepository.assignTaskToUser(userId, taskId);
+
     }
 
     @Override

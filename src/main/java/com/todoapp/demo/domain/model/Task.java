@@ -115,4 +115,18 @@ public class Task {
     public void setIdUsers(List<String> idUsers) {
         this.idUsers = idUsers;
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", startDate=" + startDate +
+                ", finishDate=" + finishDate +
+                ", status=" + status +
+                ", historyPoints=" + historyPoints +
+                ", idUsers=" + idUsers +
+                '}';
+    }
 }

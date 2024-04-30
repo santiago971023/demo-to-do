@@ -100,4 +100,17 @@ public class User {
     public void setTasks(List<Long> tasks) {
         this.tasks = tasks;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", tasks=" + tasks +
+                '}';
+    }
 }

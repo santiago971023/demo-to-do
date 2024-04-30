@@ -43,6 +43,7 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(MESSAGE, ExceptionResponse.TASK_ALREADY_EXISTS.getMessage()));
     }
 
+
     @ExceptionHandler(TaskNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleTaskNotDataFoundException(TaskNotFoundException taskNotFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -54,6 +55,8 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_ASSIGN_TASK.getMessage()));
     }
+
+
 
     @ExceptionHandler(CantRemoveTaskFromUserValidationException.class)
     public ResponseEntity<Map<String, String>> handlerCantRemoveValidationException(CantRemoveTaskFromUserValidationException e) {
@@ -100,6 +103,9 @@ public class ControllerAdvisor {
         }else if(e instanceof CantUpdateStatusTaskValidationException){
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.CANT_UPDATE_STATUS_TASK.getMessage()));
+        }else if(e instanceof TaskNotFoundInUserValidationException){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Collections.singletonMap(MESSAGE, ErrorMessagesApplication.TASK_NOT_FOUND_IN_USER.getMessage()));
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Collections.singletonMap(MESSAGE, "Error inesperado"));
