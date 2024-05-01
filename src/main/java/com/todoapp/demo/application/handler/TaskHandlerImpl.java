@@ -12,6 +12,7 @@ import com.todoapp.demo.domain.Role;
 import com.todoapp.demo.domain.Status;
 import com.todoapp.demo.domain.api.ITaskServicePort;
 import com.todoapp.demo.domain.api.IUserServicePort;
+import com.todoapp.demo.domain.api.IUserTaskServicePort;
 import com.todoapp.demo.domain.exception.task.TaskValidationExceptionDomain;
 import com.todoapp.demo.domain.model.Task;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,8 @@ public class TaskHandlerImpl implements ITaskHandler{
     private final ITaskResponseMapper taskResponseMapper;
     private final IUserServicePort userServicePort;
 
+    private final IUserTaskServicePort userTaskServicePort;
+
 
 
     @Override
@@ -53,6 +56,7 @@ public class TaskHandlerImpl implements ITaskHandler{
         }
         Task taskToUpdate = taskRequestMapper.toTask(taskRequestDtoToUpdate);
         taskToUpdate.setStartDate(taskServicePort.getTaskById(taskRequestDtoToUpdate.getId()).getStartDate());
+
         taskServicePort.updateTask(taskToUpdate);
     }
     @Override
@@ -67,13 +71,14 @@ public class TaskHandlerImpl implements ITaskHandler{
         if (!canUpdateStatusTask(status, idUpdater, idTaskUpdate)){
             throw new CantUpdateTaskValidationException(ErrorMessagesApplication.CANT_UPDATE_STATUS_TASK.getMessage());
         }
-        //taskServicePort.updateTaskStatus(idTaskUpdate, status);
+        //
         Task task = taskServicePort.getTaskById(idTaskUpdate);
 
         if(Arrays.stream(Status.values()).anyMatch(s -> s.toString().equalsIgnoreCase(status))){
             task.setStatus(Status.valueOf(status.toUpperCase()));
             System.out.println("Se identifica correctamente el status");
         }
+        taskServicePort.updateTaskStatus(idTaskUpdate, status);
         taskServicePort.updateTask(task);
     }
 

@@ -2,6 +2,7 @@ package com.todoapp.demo.infraestructure.output.jpa.repository;
 
 import com.todoapp.demo.infraestructure.output.jpa.entities.TaskEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -30,5 +31,11 @@ public interface ITaskRepository extends JpaRepository<TaskEntity, Long> {
 
     @Query(value = "INSERT INTO user_task (user_id, task_id) VALUES (:userId, :taskId)", nativeQuery = true)
     void assignTaskToUser(String userId, Long taskId);
+
+    @Modifying
+    @Query(value = "UPDATE task SET status = :status WHERE id = :taskId", nativeQuery = true)
+    void updateTaskStatus(@Param("taskId") Long taskId, @Param("status") String status);
+
+
 
 }

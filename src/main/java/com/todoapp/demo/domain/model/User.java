@@ -21,14 +21,14 @@ public class User {
 
     private List<Long> tasks;
 
-    public User(String id, String name, String lastname, String email, String password, Role role) {
+    public User(String id, String name, String lastname, String email, String password, Role role, List<Long> tasks) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.role = role;
-        this.tasks = new ArrayList<>();
+        this.tasks = tasks;
     }
 
     public User() {

@@ -4,8 +4,8 @@ public enum ErrorMessagesDomain {
 
     //  USERS
     ID_INVALID("Id cannot be null or empty."),
-    NAME_INVALID("Name cannot be null or empty."),
-    LASTNAME_INVALID("Lastname cannot be null or empty."),
+    NAME_INVALID("Name cannot be null, empty, and must contain only letters."),
+    LASTNAME_INVALID("Lastname cannot be null, empty, and must contain only letters."),
 
     ROLE_INVALID("Invalid Role"),
     EMAIL_INVALID("The email cannot be empty, null or fail to comply with the format"),

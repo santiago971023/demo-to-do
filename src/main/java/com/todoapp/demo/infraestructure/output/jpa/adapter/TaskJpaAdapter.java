@@ -2,6 +2,7 @@ package com.todoapp.demo.infraestructure.output.jpa.adapter;
 
 import com.todoapp.demo.application.exception.ErrorMessagesApplication;
 import com.todoapp.demo.application.exception.task.TaskValidationException;
+import com.todoapp.demo.domain.Status;
 import com.todoapp.demo.domain.exception.task.TaskValidationExceptionDomain;
 import com.todoapp.demo.domain.model.Task;
 import com.todoapp.demo.domain.spi.ITaskPersistencePort;
@@ -16,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class TaskJpaAdapter implements ITaskPersistencePort {
@@ -42,11 +45,23 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
 
     @Override
     public void updateTask(Task task) {
+
+        Optional<TaskEntity> entityOptional = taskRepository.findById(task.getId());
         try {
-            if (taskRepository.findById(task.getId()).isEmpty()) {
+            if (entityOptional.isPresent()) {
+                TaskEntity taskEntity = entityOptional.get();
+                taskEntity.setTitle(task.getTitle());
+                taskEntity.setDescription(task.getDescription());
+                taskEntity.setFinishDate(task.getFinishDate());
+                taskEntity.setHistoryPoints(task.getHistoryPoints());
+
+                if (task.getIdUsers() != null && !task.getIdUsers().isEmpty()) {
+                    taskEntity.setUserIds(task.getIdUsers());
+                }
+                taskRepository.save(taskEntity);
+            }else {
                 throw new TaskNotFoundException();
             }
-            taskRepository.save(taskEntityMapper.toEntity(task));
         } catch (TaskNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ExceptionResponse.TASK_NOT_FOUND.getMessage(), e);
         } catch (TaskValidationException e) {
@@ -115,6 +130,17 @@ public class TaskJpaAdapter implements ITaskPersistencePort {
 
     @Override
     public void updateTaskStatus(Long taskId, String status) {
+        Optional<TaskEntity> taskEntity = taskRepository.findById(taskId);
+
+        if(taskEntity.isPresent()){
+            TaskEntity task = taskEntity.get();
+            task.setStatus(Status.valueOf(status.toUpperCase()));
+            System.out.println("Prueba en jpa adapter");
+            taskRepository.save(task);
+        }else{
+            throw new TaskNotFoundException();
+        }
+
 
     }
 

@@ -49,5 +49,5 @@ public class TaskEntity     {
     @ElementCollection
     @CollectionTable(name = "user_task", joinColumns = @JoinColumn(name = "task_id"))
     @Column(name = "user_id")
-    private List<Long> userIds;
+    private List<String> userIds;
 }

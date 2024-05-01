@@ -46,26 +46,24 @@ public class UserUseCase implements IUserServicePort {
     @Override
     public void updateUser(User userToUpdate) {
         if (!isValidId(userToUpdate.getId())) {
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
+            throw new IdValidationExceptionDomain(ErrorMessagesDomain.ID_INVALID.getMessage());
         }
         if (!isValidName(userToUpdate.getName())) {
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.NAME_INVALID.getMessage());
+            throw new NameValidationExceptionDomain(ErrorMessagesDomain.NAME_INVALID.getMessage());
         }
         if (!isValidName(userToUpdate.getLastname())) {
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.LASTNAME_INVALID.getMessage());
+            throw new LastNameValidationExceptionDomain(ErrorMessagesDomain.LASTNAME_INVALID.getMessage());
         }
         if (!isValidEmail(userToUpdate.getEmail())) {
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.EMAIL_INVALID.getMessage());
+            throw new EmailValidationExceptionDomain(ErrorMessagesDomain.EMAIL_INVALID.getMessage());
         }
         if (!isValidPassword(userToUpdate.getPassword())) {
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.PASSWORD_INVALID.getMessage());
+            throw new PasswordValidationExceptionDomain(ErrorMessagesDomain.PASSWORD_INVALID.getMessage());
         }
         if (!isValidRole(userToUpdate.getRole().toString())) {
-            throw new UserValidationExceptionDomain(ErrorMessagesDomain.ROLE_INVALID.getMessage());
+            throw new RoleValidationExceptionDomain(ErrorMessagesDomain.ROLE_INVALID.getMessage());
         }
-        /*NOTA: Estas lineas de codigo no tenian ninguna funcionalidad, por lo que se eliminaron
-        User updatedUser = new User(userToUpdate.getName(), userToUpdate.getLastname(), userToUpdate.getEmail(),
-                userToUpdate.getPassword(), userToUpdate.getRole(), userToUpdate.getTasks());*/
+
         userPersistencePort.updateUser(userToUpdate);
     }
 
@@ -120,7 +118,7 @@ public class UserUseCase implements IUserServicePort {
             return false;
         }
         // Usamos una expresión regular para verificar que el nombre contenga solo letras
-        String regex = "^[A-Za-z ]+$";
+        String regex = "^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ ]+$";
         return name.matches(regex);
     }
 

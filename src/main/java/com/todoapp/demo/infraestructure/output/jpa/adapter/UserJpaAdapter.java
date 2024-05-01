@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class UserJpaAdapter implements IUserPersistencePort {
@@ -47,11 +48,23 @@ public class UserJpaAdapter implements IUserPersistencePort {
 
     @Override
     public void updateUser(User userToUpdate) {
+
+        Optional<UserEntity> user = userRepository.findById(userToUpdate.getId());
         try {
+
             //Se actualiza el la validacion ya que la consulta debe validar el null,
             //lo cual genera un error al momento de actualizar
-            if (userRepository.findById(userToUpdate.getId()).isPresent()) {
-                userRepository.save(userEntityMapper.toEntity(userToUpdate));
+            if (user.isPresent()) {
+                UserEntity userEntity = user.get();
+                userEntity.setName(userToUpdate.getName());
+                userEntity.setLastname(userToUpdate.getLastname());
+                userEntity.setEmail(userToUpdate.getEmail());
+                userEntity.setPassword(userToUpdate.getPassword());
+                userEntity.setRole(userToUpdate.getRole());
+                if (userToUpdate.getTasks() != null && !userToUpdate.getTasks().isEmpty()){
+                    userEntity.setTaskIds(userToUpdate.getTasks());
+                }
+                userRepository.save(userEntity);
             } else {
                 throw new UserNotFoundException();
             }

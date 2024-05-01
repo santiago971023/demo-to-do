@@ -8,6 +8,7 @@ import com.todoapp.demo.application.mapper.IUserRequestMapper;
 import com.todoapp.demo.application.mapper.IUserResponseMapper;
 import com.todoapp.demo.domain.Role;
 import com.todoapp.demo.domain.api.IUserServicePort;
+import com.todoapp.demo.domain.api.IUserTaskServicePort;
 import com.todoapp.demo.domain.model.User;
 import com.todoapp.demo.application.exception.user.CantDeleteAnotherUSerValidationException;
 import com.todoapp.demo.application.exception.user.CantUpdateAnotherUserValidationException;
@@ -27,6 +28,8 @@ public class UserHandlerImpl implements IUserHandler {
     private final IUserRequestMapper userRequestMapper;
     private final IUserResponseMapper userResponseMapper;
 
+    private final IUserTaskServicePort userTaskServicePort;
+
     @Override
     public void createUser(UserRequestDto userRequestDtoToCreate, String creatorId) {
 
@@ -45,7 +48,9 @@ public class UserHandlerImpl implements IUserHandler {
             throw new CantUpdateAnotherUserValidationException(ErrorMessagesApplication.CANT_UPDATE.getMessage());
         }
         User userToUpdate = userRequestMapper.toUser(userRequestDtoToUpdate);
+
         userServicePort.updateUser(userToUpdate);
+        userToUpdate.setTasks(userTaskServicePort.getTasksByUserId(userRequestDtoToUpdate.getId()));
     }
 
     @Override
