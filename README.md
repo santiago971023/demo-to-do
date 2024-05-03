@@ -2,20 +2,26 @@
 
 <h2>Descripción de la aplicación</h2>
 
-<p>Esta aplicación esta basada en un sistema de gestion de tareas, en el cual se implementa la arquitectura hexagonal. La aplicacion consta de dos entidades, usuarios y tareas, cada entidad tiene su respectivo crud; crear, leer, actualizar y eliminar, métodos adicionales como asignar y remover tareas de usuarios. Esta api te permite obtener listados de usuarios por busquedas. Cuenta con métodos como obtener lista de usuarios por su nombre, su apellido o por su rol. 
+<p>Esta aplicación esta basada en un sistema de gestion de tareas, en el cual se implementa la arquitectura hexagonal. La aplicacion consta de dos entidades, usuarios y tareas, cada entidad tiene su respectivo crud; crear, leer, actualizar y eliminar, métodos adicionales como asignar y remover tareas de usuarios. Esta api te permite obtener listados de usuarios por busquedas. Cuenta con métodos como obtener lista de usuarios por su nombre, su apellido o por su rol.</p> 
   
-La entidad tarea tiene  métodos adicionales para poder manipular sus datos, tales como: modificar el estado a una tarea, obtener una lista de tareas por su fecha de creación, fecha de finalización, por su estado o usuarios asignados a una tarea. La mayor parte de los métodos cuentan con permisos, ya que cada usuario tiene ciertos accesos, por ejemplo, un usuario con rol COLLABORATOR solo puede modificar un estado a una tarea si esta le está asignada, de lo contrario no se le permite acceso, estos estados son In_progress o revision, no puede tener acceso a completada.
+<p>La entidad tarea tiene  métodos adicionales para poder manipular sus datos, tales como: modificar el estado a una tarea, obtener una lista de tareas por su fecha de creación, fecha de finalización, por su estado o usuarios asignados a una tarea. La mayor parte de los métodos cuentan con permisos, ya que cada usuario tiene ciertos accesos, por ejemplo, un usuario con rol <strong>COLLABORATOR</strong> solo puede modificar un estado a una tarea si esta le está asignada, de lo contrario no se le permite acceso, estos estados son <strong>IN_PROGRESS</strong> o <strong>REVISION</strong>, no puede tener acceso a completada.</p>
 
-Contiene validaciones en cada una de sus capas, tanto en dominio, aplicación e infraestructura para el funcionamiento correcto de la api. Estas validaciones están solo para que a la base de datos ingrese información que necesitamos, un ejemplo de ello, es que un nombre de usuario no permite recibir numeros o caracteres especiales, todos estos errores se realizan con manejo de excepciones.</p> 
+<p>Contiene validaciones en cada una de sus capas, tanto en dominio, aplicación e infraestructura para el funcionamiento correcto de la api. Estas validaciones están solo para que a la base de datos ingrese información que necesitamos, un ejemplo de ello, es que un nombre de usuario no permite recibir numeros o caracteres especiales, todos estos errores se realizan con manejo de excepciones.</p> 
+
+| ROLES PERMITIDOS | ESTADOS DE LAS TAREAS PERMITIDOS |
+| :----: | :----: |
+| ADMIN  | IN_PROGRESS |                                           
+|LEADER | COMPLETED |                                                
+|COLLABORATOR | REVISION |
 
 <h2>Descripción de la arquitectura</h2>
-La arquitectura hexagonal, también conocida como puertos y adaptadores, es un enfoque de diseño de software que busca desacoplar las diferentes partes de una aplicación para hacerla más flexible y fácil de mantener. Se llama hexagonal porque visualmente se representa con un núcleo central rodeado por seis lados, cada uno representando una interfaz o puerto de entrada/salida.
+<p>La arquitectura hexagonal, también conocida como puertos y adaptadores, es un enfoque de diseño de software que busca desacoplar las diferentes partes de una aplicación para hacerla más flexible y fácil de mantener. Se llama hexagonal porque visualmente se representa con un núcleo central rodeado por seis lados, cada uno representando una interfaz o puerto de entrada/salida.</p>
 
-En esta arquitectura, el núcleo central contiene la lógica de negocio o funcionalidad principal de la aplicación. Este núcleo no depende de ningún detalle de implementación específico, como la interfaz de usuario o la base de datos.
+<p>En esta arquitectura, el núcleo central contiene la lógica de negocio o funcionalidad principal de la aplicación. Este núcleo no depende de ningún detalle de implementación específico, como la interfaz de usuario o la base de datos.</p>
 
-Los puertos son las interfaces a través de las cuales el núcleo interactúa con el mundo exterior. Por ejemplo, puede haber puertos para la interfaz de usuario, la persistencia de datos, servicios externos, etc. Estos puertos definen las operaciones que el núcleo puede realizar, pero no especifican cómo se realizan esas operaciones.
+<p>Los puertos son las interfaces a través de las cuales el núcleo interactúa con el mundo exterior. Por ejemplo, puede haber puertos para la interfaz de usuario, la persistencia de datos, servicios externos, etc. Estos puertos definen las operaciones que el núcleo puede realizar, pero no especifican cómo se realizan esas operaciones.</p>
 
-Los adaptadores son las implementaciones concretas de estos puertos. Son responsables de conectar el núcleo con el mundo exterior. Por ejemplo, un adaptador de interfaz de usuario podría ser una aplicación web o una aplicación de escritorio que permite a los usuarios interactuar con el sistema, mientras que un adaptador de persistencia de datos podría ser una base de datos SQL o un almacenamiento en memoria.
+<p>Los adaptadores son las implementaciones concretas de estos puertos. Son responsables de conectar el núcleo con el mundo exterior. Por ejemplo, un adaptador de interfaz de usuario podría ser una aplicación web o una aplicación de escritorio que permite a los usuarios interactuar con el sistema, mientras que un adaptador de persistencia de datos podría ser una base de datos SQL o un almacenamiento en memoria.</p>
 
 <h3>Tecnologías aplicadas</h3>
 
@@ -25,8 +31,7 @@ Los adaptadores son las implementaciones concretas de estos puertos. Son respons
 ![Static Badge](https://img.shields.io/badge/MapStruct%20-%20violet?style=flat)
 
 
-
-## Rutas de la API entidad User
+## Rutas de la API -  Entidad User
 
 - `Post: http://localhost:8080/users/save/{idCreator}`: Me permite crear un nuevo usuario, con el Rol de Admin
 ```
@@ -60,8 +65,9 @@ Los adaptadores son las implementaciones concretas de estos puertos. Son respons
 - `Get: http://localhost:8080/users/role/{role}`: Obtienes una lista de usuarios por su rol.
 - `Delete: http://localhost:8080/users/delete/{idUserToDelete}/{idUserDeleter}}`: Puedo eliminar un usuario, siempre y cuando tenga el rol de Admin, se envía como argumento el id del usuario a eliminar y el id del eliminador.
 
-## Rutas de la API entidad Task
-- `Post: http://localhost:8080/tasks/save/{idCreator}`: Me permite crear una nueva tarea con el Rol de Leader; no se le pasa el id de la tarea en el cuerpo, ya que esta se autogenera, como <strong>nota importante:</strong> la fecha final no puede ser anterior a la fecha actual.
+## Rutas de la API Entidad Task
+
+- `Post: http://localhost:8080/tasks/save/{idCreator}`: Me permite crear una nueva tarea con el Rol de Leader; no se le pasa el id de la tarea en el cuerpo, ya que esta se autogenera, <strong>la fecha final no puede ser anterior a la fecha actual.</strong>
 ```
 {   
     "title": "Task prueba2",
